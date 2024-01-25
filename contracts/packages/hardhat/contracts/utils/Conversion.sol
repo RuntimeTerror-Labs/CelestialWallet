@@ -33,4 +33,55 @@ library Conversion {
 
         return keccak256(bytes(concatenatedMessage));
     }
+
+    function encodeDetails(address account, uint256 balance) internal pure returns (string memory) {
+        bytes memory json = abi.encodePacked('{"address":"', toString(account), '","balance":', Strings.toString(balance), '}');
+        return base64Encode(json);
+    }
+
+    function toString(address account) internal pure returns (string memory) {
+        return Strings.toString(uint160(account));
+    }
+
+    function encode(uint256 number) internal pure returns (uint256 result) {
+        for (uint256 i = 0; i < 4; i++) {
+            result |= (number & 0xFF) << (i * 8);
+            number >>= 6;
+        }
+    }
+
+    function base64Encode(bytes memory data) internal pure returns (string memory) {
+        string memory base64abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+        uint256 length = data.length;
+        if (length == 0) return "";
+        uint256 encodedLength = 4 * ((length + 2) / 3);
+        string memory result = new string(encodedLength + encodedLength / 76);
+        bytes memory resultBytes = bytes(result);
+
+        uint256 index = 0;
+        uint256 counter = 0;
+        for (uint256 i = 0; i < length; i += 3) {
+            uint256 number = uint256(uint8(data[i])) << 16;
+            if (i + 1 < length) number |= uint256(uint8(data[i + 1])) << 8;
+            if (i + 2 < length) number |= uint256(uint8(data[i + 2]));
+
+            uint256 encoded = encode(number);
+            for (uint256 j = 0; j < 4; j++) {
+                if (i + j < length) {
+                    resultBytes[index++] = bytes(base64abc)[encoded & 0xFF];
+                } else {
+                    resultBytes[index++] = "=";
+                }
+                encoded >>= 8;
+            }
+
+            if (++counter == 19 && index < encodedLength) {
+                resultBytes[index++] = "\n";
+                counter = 0;
+            }
+        }
+
+        return string(resultBytes);
+    }
 }
