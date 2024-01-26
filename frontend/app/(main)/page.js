@@ -11,6 +11,7 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 import { Urbanist } from "next/font/google";
+import useCircuits from "@/hooks/useCircuits";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -18,6 +19,8 @@ const urbanist = Urbanist({
 });
 
 export default function Page() {
+  const { hashPassword } = useCircuits();
+
   return (
     <div className="h-full w-full flex flex-col justify-center items-center relative">
       <Image
@@ -54,7 +57,14 @@ export default function Page() {
           </div>
         </CardBody>
         <CardFooter className="pt-0 -mt-2">
-          <Button variant="gradient" fullWidth className={urbanist.className}>
+          <Button
+            variant="gradient"
+            fullWidth
+            className={urbanist.className}
+            onClick={() => {
+              hashPassword("test");
+            }}
+          >
             Sign In
           </Button>
           <Typography
