@@ -74,7 +74,7 @@ export default function Page() {
             Don&apos;t have a Celestial?
             <Typography
               as="a"
-              href="#signup"
+              href="/signup"
               variant="small"
               color="blue-gray"
               className={"ml-1 font-bold " + urbanist.className}
