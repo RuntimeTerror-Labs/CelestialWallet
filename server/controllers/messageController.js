@@ -52,6 +52,21 @@ const fetchMessages = async (req, res) => {
   }
 };
 
+const fetchLatestMessage = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+
+    const latestMessage = await Message.findOne({ chat: chatId })
+      .sort({ updatedAt: -1 })
+      .limit(1);
+
+    return res.status(200).json(latestMessage);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 const deleteMessages = async (req, res) => {
   const { chatId } = req.params;
 
@@ -75,4 +90,9 @@ const deleteMessages = async (req, res) => {
   }
 };
 
-module.exports = { sendMessage, fetchMessages, deleteMessages };
+module.exports = {
+  sendMessage,
+  fetchMessages,
+  deleteMessages,
+  fetchLatestMessage,
+};

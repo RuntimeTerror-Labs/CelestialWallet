@@ -18,6 +18,7 @@ app.use("/api/utils", require("./routes/api/utils"));
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/contacts", require("./routes/api/contacts"));
 app.use("/api/messages", require("./routes/api/messages"));
+app.use("/api/ably", require("./routes/api/ably"));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
