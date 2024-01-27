@@ -6,7 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setContacts } from "@/redux/slice/contactsSlice";
+import { setContacts, setOriginalContacts } from "@/redux/slice/contactsSlice";
 
 import ContactsItem from "./ContactsItem";
 
@@ -23,10 +23,11 @@ const Contacts = () => {
       try {
         setIsLoading(true);
         const chatsLists = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/contacts/${currentUser.pubKey}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/contacts/${"0x42Krpa7vb"}`
         );
 
         dispatch(setContacts(chatsLists.data));
+        dispatch(setOriginalContacts(chatsLists.data));
         setIsLoading(false);
       } catch (error) {
         toast.error("Error loading contacts");

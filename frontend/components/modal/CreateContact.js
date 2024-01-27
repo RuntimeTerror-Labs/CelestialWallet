@@ -16,7 +16,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
-import { addContact } from "@/redux/slice/contactsSlice";
+import { addContact, addOriginalContact } from "@/redux/slice/contactsSlice";
 import { toggleNewContactModal } from "@/redux/slice/modalSlice";
 
 const CreateContact = () => {
@@ -44,6 +44,7 @@ const CreateContact = () => {
       );
 
       dispatch(addContact(res.data));
+      dispatch(addOriginalContact(res.data));
       handleOpen();
     } catch (err) {
       toast.error("Failed to create contact");
