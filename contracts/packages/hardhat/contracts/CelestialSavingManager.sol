@@ -6,8 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "./utils/Conversion.sol";
 
-contract SavingsAccount is ERC721URIStorage, Ownable {
-    uint256 public redemptionPeriod;
+contract CelestialSavingManager is ERC721URIStorage, Ownable {
     uint256 public nextNFTId;
 
     struct Account {
@@ -18,8 +17,7 @@ contract SavingsAccount is ERC721URIStorage, Ownable {
 
     mapping(address => Account) public accounts;
 
-    constructor(uint256 _redemptionPeriod) ERC721("WeeklySummaryNFT", "WSNFT") {
-        redemptionPeriod = _redemptionPeriod;
+    constructor() ERC721("WeeklySummaryNFT", "WSNFT") {
         nextNFTId = 1;
     }
 

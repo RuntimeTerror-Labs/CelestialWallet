@@ -30,7 +30,7 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  defaultNetwork: "localhost",
+  defaultNetwork: "lightlinkPegasus",
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
@@ -126,10 +126,24 @@ const config: HardhatUserConfig = {
       url: "https://sepolia.publicgoods.network",
       accounts: [deployerPrivateKey],
     },
+    lightlinkPegasus: {
+      url: "https://replicator.pegasus.lightlink.io/rpc/v1",
+      accounts: [deployerPrivateKey],
+    },
   },
   // configuration for harhdat-verify plugin
   etherscan: {
     apiKey: `${etherscanApiKey}`,
+    customChains: [
+      {
+        network: "lightlinkPegasus",
+        chainId: 1891,
+        urls: {
+          apiURL: "https://pegasus.lightlink.io/api/v2/",
+          browserURL: "https://pegasus.lightlink.io/",
+        },
+      },
+    ],
   },
   // configuration for etherscan-verify from hardhat-deploy plugin
   verify: {
