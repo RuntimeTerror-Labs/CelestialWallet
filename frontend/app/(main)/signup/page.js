@@ -22,6 +22,7 @@ const urbanist = Urbanist({
 
 export default function SignupPage() {
   const step = useSelector((state) => state.signup.step);
+  const isLoading = useSelector((state) => state.signup.isLoading);
 
   return (
     <>
@@ -56,21 +57,23 @@ export default function SignupPage() {
             {step === 1 && <Step1 />}
           </CardBody>
           <CardFooter className="pt-0 -mt-7">
-            <Typography
-              variant="small"
-              className={"mt-4 flex justify-center " + urbanist.className}
-            >
-              Back to
+            {!isLoading && (
               <Typography
-                as="a"
-                href="/"
                 variant="small"
-                color="blue-gray"
-                className={"ml-1 font-bold " + urbanist.className}
+                className={"mt-4 flex justify-center " + urbanist.className}
               >
-                Sign In
+                Back to
+                <Typography
+                  as="a"
+                  href="/"
+                  variant="small"
+                  color="blue-gray"
+                  className={"ml-1 font-bold " + urbanist.className}
+                >
+                  Sign In
+                </Typography>
               </Typography>
-            </Typography>
+            )}
           </CardFooter>
         </Card>
       </div>
