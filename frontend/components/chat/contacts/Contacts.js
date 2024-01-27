@@ -15,6 +15,7 @@ const Contacts = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const currentUser = useSelector((state) => state.user.user);
   const contacts = useSelector((state) => state.contacts.contacts);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const Contacts = () => {
       try {
         setIsLoading(true);
         const chatsLists = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/contacts/${"0x42Krpa7vb"}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/contacts/${currentUser.pubKey}`
         );
 
         dispatch(setContacts(chatsLists.data));

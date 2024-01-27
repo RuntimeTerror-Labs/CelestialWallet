@@ -8,6 +8,8 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
+import pubKeySlicer from "@/lib/pubKeySlicer";
+
 const ContactsItem = ({ chat }) => {
   let flag = true;
 
@@ -17,22 +19,6 @@ const ContactsItem = ({ chat }) => {
 
   const user =
     chat.users[0] === currentUser.pubKey ? chat.users[1] : chat.users[0];
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${user}`
-        );
-
-        setMessage(res.data);
-      } catch (error) {
-        toast.error("Error loading contacts data.");
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   useEffect(() => {
     const fetchMessage = async () => {
@@ -49,36 +35,35 @@ const ContactsItem = ({ chat }) => {
 
     // if (message) {
     //   flag = false;
-    console.log("fetchMessage");
     fetchMessage();
     // }
   }, []);
 
   return (
-    <>
-      <li className="flex justify-between items-center mx-2 py-1 px-4 hover:bg-gray-50 cursor-pointer rounded-lg">
-        <div className="flex items-center my-2">
-          <div className="w-10 h-10 bg-red-200 rounded-full mr-3 overflow-hidden">
-            <Avatar
-              size={40}
-              name={currentUser.pubKey}
-              variant="marble"
-              colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
-            />
-          </div>
-
-          <div>
-            <h3 className="text-base font-bold text-black">{user}</h3>
-
-            <div className="text-xs font-medium w-24 hide-scroll overflow-hidden whitespace-nowrap scroll-on-hover">
-              {message?.content}
-            </div>
-          </div>
+    <li className="flex justify-between items-center mx-2 py-1 px-4 hover:bg-gray-50 cursor-pointer rounded-lg">
+      <div className="flex items-center my-2">
+        <div className="w-10 h-10 bg-red-200 rounded-full mr-3 overflow-hidden">
+          <Avatar
+            size={40}
+            name={user}
+            variant="marble"
+            colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+          />
         </div>
 
-        <ChevronRightIcon className="h-5 w-5 text-black" />
-      </li>
-    </>
+        <div>
+          <h3 className="text-base font-bold text-black">
+            {pubKeySlicer(user)}
+          </h3>
+
+          <div className="text-xs font-medium w-24 hide-scroll overflow-hidden whitespace-nowrap scroll-on-hover">
+            {message?.content}
+          </div>
+        </div>
+      </div>
+
+      <ChevronRightIcon className="h-5 w-5 text-black" />
+    </li>
   );
 };
 

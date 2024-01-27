@@ -1,38 +1,49 @@
 const Chat = require("../schemas/contactSchema");
-const User = require("../schemas/userSchema");
+const Message = require("../schemas/messageSchema");
 
 const accessChat = async (req, res) => {
-  const { currentUser, userId } = req.body;
-  // const currentUser = req.pubkey;
+  const { currentUser, userId, message } = req.body;
 
   if (!userId) {
-    console.log("UserId param not sent with request");
-    return res.sendStatus(400);
+    return res.status(400).json({ error: "UserId not found in req." });
   }
 
-  var isChat = await Chat.find({
-    $and: [
-      { users: { $elemMatch: { $eq: currentUser } } },
-      { users: { $elemMatch: { $eq: userId } } },
-    ],
-  });
+  try {
+    const existingChat = await Chat.findOne({
+      $and: [
+        { users: { $elemMatch: { $eq: currentUser } } },
+        { users: { $elemMatch: { $eq: userId } } },
+      ],
+    });
 
-  if (isChat.length > 0) {
-    res.send(isChat[0]);
-  } else {
-    var chatData = {
-      users: [currentUser, userId],
-    };
+    if (existingChat) {
+      const { _id, users } = existingChat;
 
-    try {
+      res.status(200).json({ _id, users });
+    } else {
+      const chatData = {
+        users: [currentUser, userId],
+      };
+
       const createdChat = await Chat.create(chatData);
-      const FullChat = await Chat.findOne({ _id: createdChat._id });
 
-      res.status(200).json(FullChat);
-    } catch (error) {
-      res.status(400);
-      throw new Error(error.message);
+      const { _id, users } = await Chat.findOne({
+        _id: createdChat._id,
+      }).select("_id users");
+
+      if (message) {
+        await Message.create({
+          type: "text",
+          sender: currentUser,
+          content: message,
+          chat: _id,
+        });
+      }
+
+      res.status(200).json({ _id, users });
     }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
