@@ -2,7 +2,8 @@
 
 import { Noir } from "@noir-lang/noir_js";
 import { BarretenbergBackend } from "@noir-lang/backend_barretenberg";
-import passkeyHash from "@/lib/circuits/passkey_Hash.json";
+import passkeyHash from "@/lib/circuits/passkey_hash.json";
+import recoveryHash from "@/lib/circuits/recovery_hash.json";
 import { ethers } from "ethers";
 
 export default function useCircuits() {
@@ -19,8 +20,24 @@ export default function useCircuits() {
 
     const output = await noir.execute(input);
 
-    console.log(output.returnValue);
+    return output.returnValue;
   };
 
-  return { hashPassword };
+  const hashRecovery = async (input) => {
+    const backend = new BarretenbergBackend(recoveryHash, {
+      threads: navigator.hardwareConcurrency,
+    });
+
+    const noir = new Noir(recoveryHash, backend);
+
+    const inputs = {
+      input: Array.from(ethers.utils.arrayify(input)),
+    };
+
+    const output = await noir.execute(inputs);
+
+    return output.returnValue;
+  };
+
+  return { hashPassword, hashRecovery };
 }
