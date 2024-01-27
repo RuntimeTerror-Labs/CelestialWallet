@@ -1,28 +1,22 @@
 const User = require("../schemas/userSchema");
 
-// Create a new user
 const createUser = async (req, res) => {
   try {
-    // Extract user data from the request body
     const { username, pubKey } = req.body;
 
-    // Check if the username is already taken
     const existingUser = await User.findOne({ username });
 
     if (existingUser) {
       return res.status(400).json({ error: "Username already exists" });
     }
 
-    // Create a new user instance
     const newUser = new User({
       username,
       pubKey,
     });
 
-    // Save the user to the database
     await newUser.save();
 
-    // Return the newly created user
     return res.status(201).json(newUser);
   } catch (error) {
     return res
@@ -31,4 +25,21 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser };
+const fetchUser = async (req, res) => {
+  try {
+    const { pubKey } = req.params;
+
+    const user = await User.findOne({ pubKey });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+module.exports = { createUser, fetchUser };

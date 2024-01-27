@@ -7,8 +7,10 @@ const {
   deleteChat,
 } = require("../../controllers/contactController");
 
-router.route("/").get(fetchChats);
+router.route("/:pubKey").get(fetchChats);
+
 router.route("/").post(accessChat);
+
 router.route("/:chatId").delete(deleteChat);
 
 module.exports = router;

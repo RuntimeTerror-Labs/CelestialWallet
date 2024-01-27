@@ -10,7 +10,9 @@ const {
 
 router.route("/:chatId").get(fetchMessages);
 router.route("/:chatId/latest-message").get(fetchLatestMessage);
+
 router.route("/").post(sendMessage);
+
 router.route("/:chatId").delete(deleteMessages);
 
 module.exports = router;

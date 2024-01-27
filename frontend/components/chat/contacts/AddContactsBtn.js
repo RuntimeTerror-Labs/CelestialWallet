@@ -5,7 +5,7 @@ import { UserPlusIcon } from "@heroicons/react/24/outline";
 
 import { useDispatch } from "react-redux";
 
-import { toggleAddContactModal } from "@/redux/slice/modalsSlice";
+import { toggleNewContactModal } from "@/redux/slice/modalSlice";
 
 const AddContactsBtn = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const AddContactsBtn = () => {
   return (
     <Button
       className="p-2.5 bg-transparent shadow-none hover:shadow-sm hover:scale-105 transition-all duration-200 ease-in-out"
-      onClick={() => dispatch(toggleAddContactModal(true))}
+      onClick={() => dispatch(toggleNewContactModal(true))}
     >
       <UserPlusIcon className="h-4 w-4 text-black" />
     </Button>

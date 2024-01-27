@@ -22,22 +22,7 @@ const MessageInput = () => {
     }
   }, [message]);
 
-  const sendMessage = async (e) => {
-    // e.preventDefault();
-    // if (!pushSign || !message.trim()) return;
-    // if (disabled) return;
-    // try {
-    //   setDisabled(true);
-    //   await pushSign.chat.send(currentContact.did.split(':')[1], {
-    //     content: `${pubKey}::${message}`,
-    //     type: 'Text',
-    //   });
-    //   setMessage('');
-    //   setDisabled(false);
-    // } catch (err) {
-    //   toast.error('Error sending message');
-    // }
-  };
+  const sendMessage = async (e) => {};
 
   return (
     <form className="w-full flex justify-between pr-1 gap-2 bg-white">

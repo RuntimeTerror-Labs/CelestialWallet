@@ -27,7 +27,7 @@ const ContactsBody = () => {
       </div>
 
       <div className="h-[calc(100vh-116px)] flex flex-col overflow-hidden relative">
-        <div className="overflow-y-auto hide-scroll">
+        <div className="overflow-y-auto hide-scroll h-full">
           <Contacts />
         </div>
       </div>

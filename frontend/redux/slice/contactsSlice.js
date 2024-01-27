@@ -1,56 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const contactsSlice = createSlice({
-  name: 'contacts',
+  name: "contacts",
+
   initialState: {
-    messages: [],
-    pushSign: null,
-    recentRequest: null,
-    recentContact: null,
-    currentContact: null,
+    contacts: [],
   },
 
   reducers: {
-    setPushSign: (state, action) => {
-      state.pushSign = action.payload;
-    },
-
-    setCurrentContact: (state, action) => {
-      state.currentContact = action.payload;
-    },
-
-    setRecentContact: (state, action) => {
-      state.recentContact = action.payload;
-    },
-
-    updateRecentRequest: (state, action) => {
-      state.recentRequest = action.payload;
-    },
-
-    setMessages: (state, action) => {
-      state.messages = action.payload;
-    },
-
-    updateMessages: (state, action) => {
-      state.messages.push(action.payload);
-    },
-
-    resetContacts: (state) => {
-      state.currentContact = null;
-      state.recentContact = null;
-      state.messages = [];
+    setContacts(state, action) {
+      state.contacts = action.payload;
     },
   },
 });
 
-export const {
-  setPushSign,
-  setCurrentContact,
-  setRecentContact,
-  resetContacts,
-  setMessages,
-  updateMessages,
-  updateRecentRequest,
-} = contactsSlice.actions;
+export const { setContacts } = contactsSlice.actions;
 
 export default contactsSlice.reducer;

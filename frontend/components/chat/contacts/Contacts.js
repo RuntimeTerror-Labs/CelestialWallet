@@ -2,115 +2,43 @@
 
 import { useEffect, useState } from "react";
 
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+
+import { setContacts } from "@/redux/slice/contactsSlice";
+
 import ContactsItem from "./ContactsItem";
 
 const Contacts = () => {
-  const [contacts, setContacts] = useState([]);
+  const dispatch = useDispatch();
+
   const [isLoading, setIsLoading] = useState(true);
+
+  const contacts = useSelector((state) => state.contacts.contacts);
 
   useEffect(() => {
     const initializeChats = async () => {
-      const chatsLists = [
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-        {
-          profilePicture: "/next.svg",
-          message: "Hello",
-        },
-      ];
-      setContacts(chatsLists);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const chatsLists = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/contacts/${"0x42Krpa7vb"}`
+        );
+
+        dispatch(setContacts(chatsLists.data));
+        setIsLoading(false);
+      } catch (error) {
+        toast.error("Error loading contacts");
+      }
     };
 
     initializeChats();
   }, []);
 
   return (
-    <div className="relative flex-1">
+    <div className="relative flex-1 h-full">
       {isLoading ? (
-        <p className="text-primary-white/60 z-10 absolute left-1/2 animate-spin">
+        <p className="text-primary-white/60 z-10 absolute left-1/2 animate-spin mt-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

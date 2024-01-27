@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const { createUser } = require("../../controllers/userController");
+const { createUser, fetchUser } = require("../../controllers/userController");
+
+router.route("/:pubKey").get(fetchUser);
 
 router.route("/").post(createUser);
 

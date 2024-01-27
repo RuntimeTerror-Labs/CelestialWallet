@@ -37,7 +37,7 @@ const accessChat = async (req, res) => {
 };
 
 const fetchChats = async (req, res) => {
-  const { pubKey } = req.body;
+  const { pubKey } = req.params;
 
   try {
     const chats = await Chat.find({
