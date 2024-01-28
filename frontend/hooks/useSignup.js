@@ -10,7 +10,11 @@ import useCircuits from "@/hooks/useCircuits";
 import useRelay from "./useRelay";
 import { CelestialFactory } from "@/lib/abis/AddressManager";
 import CelestialFactoryABI from "@/lib/abis/CelestialFactory.json";
-import { updatePubkey, updateUsername } from "@/redux/slice/userSlice";
+import {
+  updatePassword,
+  updatePubkey,
+  updateUsername,
+} from "@/redux/slice/userSlice";
 import { useRouter } from "next/navigation";
 
 export default function useSignup() {
@@ -82,6 +86,7 @@ export default function useSignup() {
       const wallet = await factory.getCelestial(name + "@celestial");
       dispatch(updatePubkey(wallet.walletAddress));
       dispatch(updateUsername(name + "@celestial"));
+      dispatch(updatePassword(password));
 
       router.push("/dashboard");
 
