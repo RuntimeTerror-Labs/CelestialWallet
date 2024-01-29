@@ -24,7 +24,7 @@ const ConfirmPayment = () => {
   const selectedContact = useSelector(
     (state) => state.contacts.selectedContact
   );
-  const ably = useSelector((state) => state.contacts.ably);
+  const ably = useSelector((state) => state.contacts.ablyAuth);
   const currentUser = useSelector((state) => state.user.user);
   const open = useSelector((state) => state.modal.paymentModal);
   const paymentAmount = useSelector((state) => state.data.paymentAmount);
@@ -38,24 +38,18 @@ const ConfirmPayment = () => {
     e.preventDefault();
 
     if (!paymentAmount) {
-      toast.error("Message cannot be empty.");
+      toast.error("Amount cannot be empty or 0.");
       return;
     }
 
     try {
-      const realtime = new Ably.Realtime({
-        token: ably.token,
-      });
+      const channel = ably.channels.get(`chatId-${selectedContact._id}`);
 
-      realtime.connection.once("connected", () => {
-        const channel = realtime.channels.get(`chatId-${selectedContact._id}`);
-
-        channel.publish("payment", {
-          content: paymentAmount,
-          createdAt: new Date().toISOString(),
-          type: "payment",
-          sender: currentUser.pubKey,
-        });
+      channel.publish("payment", {
+        content: paymentAmount,
+        createdAt: new Date().toISOString(),
+        type: "payment",
+        sender: currentUser.pubKey,
       });
 
       axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`, {

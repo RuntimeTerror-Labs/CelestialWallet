@@ -5,6 +5,7 @@ const contactsSlice = createSlice({
 
   initialState: {
     ably: null,
+    ablyAuth: null,
     contacts: [],
     messages: [],
     latestMessage: null,
@@ -48,11 +49,16 @@ const contactsSlice = createSlice({
     setLatestMessage(state, action) {
       state.latestMessage = action.payload;
     },
+
+    setAblyAuth(state, action) {
+      state.ablyAuth = action.payload;
+    },
   },
 });
 
 export const {
   setAbly,
+  setAblyAuth,
   addContact,
   setContacts,
   addMessage,

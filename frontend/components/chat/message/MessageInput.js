@@ -18,7 +18,7 @@ const MessageInput = () => {
   const selectedContact = useSelector(
     (state) => state.contacts.selectedContact
   );
-  const ably = useSelector((state) => state.contacts.ably);
+  const ably = useSelector((state) => state.contacts.ablyAuth);
   const currentUser = useSelector((state) => state.user.user);
 
   const [message, setMessage] = useState("");
@@ -62,30 +62,24 @@ const MessageInput = () => {
     setDisabled(true);
 
     try {
-      const realtime = new Ably.Realtime({
-        token: ably.token,
-      });
+      const channel = ably.channels.get(`chatId-${selectedContact._id}`);
 
-      realtime.connection.once("connected", () => {
-        const channel = realtime.channels.get(`chatId-${selectedContact._id}`);
-
-        channel.publish(
-          "message",
-          {
-            content: message.trim(),
-            createdAt: new Date().toISOString(),
-            type: "text",
-            sender: currentUser.pubKey,
-          },
-          (err) => {
-            if (err) {
-              console.error("Error publishing message:", err);
-            } else {
-              console.log("Message sent successfully");
-            }
+      channel.publish(
+        "message",
+        {
+          content: message.trim(),
+          createdAt: new Date().toISOString(),
+          type: "text",
+          sender: currentUser.pubKey,
+        },
+        (err) => {
+          if (err) {
+            console.error("Error publishing message:", err);
+          } else {
+            console.log("Message sent successfully");
           }
-        );
-      });
+        }
+      );
 
       axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`, {
         type: "text",

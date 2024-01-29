@@ -8,7 +8,12 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import MessageWithDate from "../message/MessageWithDate";
-import { addMessage, setAbly, setMessages } from "@/redux/slice/contactsSlice";
+import {
+  addMessage,
+  setAbly,
+  setAblyAuth,
+  setMessages,
+} from "@/redux/slice/contactsSlice";
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -17,7 +22,7 @@ const Chat = () => {
     (state) => state.contacts.selectedContact
   );
   const currentUser = useSelector((state) => state.user.user);
-  const ablyAuth = useSelector((state) => state.contacts.ably);
+  const ablyAuth = useSelector((state) => state.contacts.ablyAuth);
   const messages = useSelector((state) => state.contacts.messages);
   // const messagesContainerRef = useRef(null);
 
@@ -62,6 +67,7 @@ const Chat = () => {
     };
 
     const realtime = new Ably.Realtime({ authCallback });
+    dispatch(setAblyAuth(realtime));
 
     const setAblyClient = async () => {
       const response = await axios.get(
@@ -84,11 +90,7 @@ const Chat = () => {
 
     setLoading(true);
 
-    const ably = new Ably.Realtime({
-      token: ablyAuth.token,
-    });
-
-    const channel = ably.channels.get(`chatId-${selectedContact._id}`);
+    const channel = ablyAuth.channels.get(`chatId-${selectedContact._id}`);
 
     channel.subscribe((message) => {
       dispatch(addMessage(message.data));
