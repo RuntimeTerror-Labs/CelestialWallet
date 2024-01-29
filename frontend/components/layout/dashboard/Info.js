@@ -32,14 +32,14 @@ export default function Info() {
       </div>
 
       <p
-        className="text-2xl mb-4 mt-2 text-black font-bold flex items-center hover:underline hover:cursor-pointer text-black/70 group-hover:text-white/70 transition duration-300"
+        className="text-xl mb-4 mt-2 text-black font-bold flex items-center hover:underline hover:cursor-pointer text-black/70 group-hover:text-white/70 transition duration-300"
         onClick={() => {
           navigator.clipboard.writeText(walletAddress);
           toast.success("Copied to clipboard!");
         }}
       >
         {walletAddress.slice(0, 6) + "..." + walletAddress.slice(-4)}{" "}
-        <Copy className="inline-block ml-2 text-black/70" size={20} />
+        <Copy className="inline-block ml-2 text-black/70" size={15} />
       </p>
 
       <div

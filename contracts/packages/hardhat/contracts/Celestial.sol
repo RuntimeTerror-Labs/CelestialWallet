@@ -19,6 +19,7 @@ contract Celestial is TokenCallbackHandler, Initializable{
     bytes32 public passwordHash;
 
     bytes32 public recoveryHash;
+    string public email;
 
     uint256 private nonce;
 
@@ -47,13 +48,14 @@ contract Celestial is TokenCallbackHandler, Initializable{
         }
     }
 
-    function initialize(bytes32 _passwordHash, bytes32 _recoveryHash) external initializer {
-        _initialize(_passwordHash, _recoveryHash);
+    function initialize(bytes32 _passwordHash, bytes32 _recoveryHash, string memory _email) external initializer {
+        _initialize(_passwordHash, _recoveryHash, _email);
     }
 
-    function _initialize(bytes32 _passwordHash, bytes32 _recoveryHash) internal virtual {
+    function _initialize(bytes32 _passwordHash, bytes32 _recoveryHash, string memory _email) internal virtual {
         passwordHash = _passwordHash;
         recoveryHash = _recoveryHash;
+        email = _email;
     }
 
     function verifyPasskey(bytes calldata proof) public view returns (bool) {
@@ -108,9 +110,9 @@ contract Celestial is TokenCallbackHandler, Initializable{
         return true;
     }
 
-    function executeChangeRecovery(bytes calldata proof, bytes32 _recoveryHash) external payable returns (bool) {
+    function executeChangeRecovery(bytes calldata proof, bytes32 _recoveryHash, string memory _email) external payable returns (bool) {
         require(useRecovery(proof), "Invalid recovery");
-        _changeRecovery(_recoveryHash);
+        _changeRecovery(_recoveryHash, _email);
         return true;
     }
 
@@ -118,8 +120,9 @@ contract Celestial is TokenCallbackHandler, Initializable{
 		passwordHash = _passwordHash;
 	}
 
-    function _changeRecovery(bytes32 _recoveryHash) internal  {
+    function _changeRecovery(bytes32 _recoveryHash, string memory _email) internal  {
         recoveryHash = _recoveryHash;
+        email = _email;
     }
 
     function _execute(address dest, uint256 value, bytes calldata func) internal {
