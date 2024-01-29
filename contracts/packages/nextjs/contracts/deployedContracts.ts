@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   1891: {
     CelestialFactory: {
-      address: "0x2aa4c97688f340C8A2bDE2016b16dEFDC259834D",
+      address: "0x88a0b5C0AACBF567400B29632aA90b81e9a2f01f",
       abi: [
         {
           inputs: [
