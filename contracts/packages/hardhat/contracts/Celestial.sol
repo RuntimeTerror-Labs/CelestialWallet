@@ -147,4 +147,8 @@ contract Celestial is TokenCallbackHandler, Initializable{
             }
         }
     }
+
+    receive() external payable {}
+
+    fallback() external payable {}
 }
