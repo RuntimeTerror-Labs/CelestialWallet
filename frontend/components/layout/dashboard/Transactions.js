@@ -26,14 +26,16 @@ export default function Transactions() {
       </div>
 
       {transactions && transactions.length > 0 && (
-        <Button
-          className="rounded-2xl z-10 bg-blue-500/80"
-          onClick={() => {
-            router.push("/transactions");
-          }}
-        >
-          View All
-        </Button>
+        <div className="w-full z-10">
+          <Button
+            className="rounded-2xl z-10 w-full bg-blue-500/80"
+            onClick={() => {
+              router.push("/transactions");
+            }}
+          >
+            View All
+          </Button>
+        </div>
       )}
 
       <ArrowLeftRight

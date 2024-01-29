@@ -8,6 +8,7 @@ const dataSlice = createSlice({
     balance: "-.--",
     marketData: [],
     transactions: [],
+    savings: null,
   },
 
   reducers: {
@@ -23,10 +24,18 @@ const dataSlice = createSlice({
     setTransactions: (state, actions) => {
       state.transactions = actions.payload;
     },
+    setSavings: (state, actions) => {
+      state.savings = actions.payload;
+    },
   },
 });
 
-export const { setEthPrice, setBalance, setMarketData, setTransactions } =
-  dataSlice.actions;
+export const {
+  setEthPrice,
+  setBalance,
+  setMarketData,
+  setTransactions,
+  setSavings,
+} = dataSlice.actions;
 
 export default dataSlice.reducer;

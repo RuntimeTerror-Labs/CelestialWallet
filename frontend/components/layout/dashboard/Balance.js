@@ -56,7 +56,7 @@ export default function Balance() {
       </p>
 
       <p className="mt-2 text-2xl font-bold text-black/60">
-        {balance === "-.--" ? balance : Number(balance).toFixed(3)} ETH
+        {balance === "-.--" ? balance : Number(balance).toFixed(4)} ETH
       </p>
 
       {marketData && marketData.length > 0 && (

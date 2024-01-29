@@ -7,7 +7,7 @@ export default function TxMini({ tx }) {
   const ethPrice = useSelector((state) => state.data.ethPrice);
 
   return (
-    <div className="flex w-full mt-2 rounded-2xl h-[70px] bg-white border-blue-500/70 hover:shadow-lg transition duration-300 border-[1px]">
+    <div className="flex w-full mt-4 rounded-2xl h-[70px] bg-white border-blue-500/70 hover:shadow-lg transition duration-300 border-[1px]">
       <div className=" flex h-full w-full items-center justify-between px-2">
         <p className="text-black/50 text-sm font-bold">
           {tx.to.hash === walletAddress ? (
