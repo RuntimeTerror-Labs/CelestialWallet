@@ -4,13 +4,14 @@ const userSlice = createSlice({
   name: "user",
 
   initialState: {
-    user: { pubKey: "0x0000000", username: "Anoy.eth" },
+    user: { pubKey: "0x31Krpa7vb", username: "Anoy.eth" },
   },
 
   reducers: {
     updatePubkey: (state, action) => {
       state.user.pubKey = action.payload;
     },
+
     updateUsername: (state, action) => {
       state.user.username = action.payload;
     },

@@ -1,17 +1,19 @@
-"use strict";
+"use client";
 
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 import axios from "axios";
 import Avatar from "boring-avatars";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import pubKeySlicer from "@/lib/pubKeySlicer";
+import { setSelectedContact } from "@/redux/slice/contactsSlice";
 
 const ContactsItem = ({ chat }) => {
   let flag = true;
+  const dispatch = useDispatch();
 
   const [message, setMessage] = useState(null);
 
@@ -39,8 +41,15 @@ const ContactsItem = ({ chat }) => {
     // }
   }, []);
 
+  const handleContactClick = () => {
+    dispatch(setSelectedContact(chat));
+  };
+
   return (
-    <li className="flex justify-between items-center mx-2 py-1 px-4 hover:bg-gray-50 cursor-pointer rounded-lg">
+    <li
+      className="flex justify-between items-center mx-2 py-1 px-4 hover:bg-gray-50 cursor-pointer rounded-lg"
+      onClick={handleContactClick}
+    >
       <div className="flex items-center my-2">
         <div className="w-10 h-10 bg-red-200 rounded-full mr-3 overflow-hidden">
           <Avatar

@@ -1,6 +1,7 @@
 "use client";
 
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import Avatar from "boring-avatars";
 
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -24,41 +25,69 @@ const HeaderLoader = () => {
 };
 
 const ChatHeader = () => {
+  const currentUser = useSelector((state) => state.user.user);
+  const chat = useSelector((state) => state.contacts.selectedContact);
+
+  const user =
+    chat?.users[0] === currentUser.pubKey ? chat?.users[1] : chat?.users[0];
+
   return (
     <div className="flex justify-between items-center w-full py-2 px-5 relative z-10 bg-white border-b border-gray-200">
-      <div className="flex gap-3">
-        <div className="w-11 h-11 aspect-square rounded-full overflow-hidden">
-          <Image src={"/next.svg"} width={44} height={44} alt="Profile" />
-        </div>
+      {chat ? (
+        <div className="flex gap-3">
+          <div className="w-11 h-11 aspect-square rounded-full overflow-hidden">
+            <Avatar
+              size={44}
+              name={user}
+              variant="marble"
+              colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+            />
+          </div>
 
-        {/* <div
+          {/* <div
           className={`absolute top-0.5 right-1 border-primary-white border rounded-full w-1.5 h-1.5 ${
             status === "online" ? "bg-gradient-primary" : "bg-[#DF0000]"
           }`}
         ></div> */}
 
-        <div className="flex flex-col justify-center">
-          <h3 className="text-xl font-bold text-black">Hello</h3>
+          <div className="flex flex-col justify-center">
+            <h3 className="text-xl font-bold text-black">{user}</h3>
 
-          {/* <p className="text-xs font-medium text-primary-white/60">
+            {/* <p className="text-xs font-medium text-primary-white/60">
                 {status ? 'Active' : 'Not Active'}
               </p> */}
 
-          <div className="text-xs flex items-center">
-            <button
-              className={`flex flex-start text-gray-600 text-[12px] hover:cursor-pointer`}
-              onClick={() => {
-                navigator.clipboard.writeText("Hello");
+            <div className="text-xs flex items-center">
+              <button
+                className={`flex flex-start text-gray-600 text-[12px] hover:cursor-pointer`}
+                onClick={() => {
+                  navigator.clipboard.writeText(user);
 
-                toast.success("Copied to clipboard");
-              }}
-            >
-              Click to Copy
-              <DocumentDuplicateIcon className="w-3 h-3 mt-px ml-1 text-gray-600" />
-            </button>
+                  toast.success("Copied to clipboard");
+                }}
+              >
+                Click to Copy
+                <DocumentDuplicateIcon className="w-3 h-3 mt-px ml-1 text-gray-600" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex gap-3">
+          <div className="w-11 h-11 aspect-square rounded-full overflow-hidden">
+            <Avatar
+              size={44}
+              name="Celestial"
+              variant="marble"
+              colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+            />
+          </div>
+
+          <div className="flex flex-col justify-center">
+            <h3 className="text-xl font-bold text-black">Celestial</h3>
+          </div>
+        </div>
+      )}
 
       {/* <ChatHeaderMenu /> */}
     </div>

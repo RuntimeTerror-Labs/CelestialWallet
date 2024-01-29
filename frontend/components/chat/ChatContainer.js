@@ -1,5 +1,4 @@
 import ChatBox from "./chatBox/ChatBox";
-import ChatHeader from "./chatBox/header/ChatHeader";
 
 const ChatContainer = () => {
   return (

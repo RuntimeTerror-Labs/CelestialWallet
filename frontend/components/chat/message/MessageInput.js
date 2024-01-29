@@ -2,13 +2,23 @@
 
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import Ably from "ably";
+import axios from "axios";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import { Loader2Icon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const MessageInput = () => {
   const searchParams = useSearchParams();
+
+  const selectedContact = useSelector(
+    (state) => state.contacts.selectedContact
+  );
+  const currentUser = useSelector((state) => state.user.user);
+  const ably = useSelector((state) => state.contacts.ably);
+  const [ablyAuth, setAblyAuth] = useState(null);
 
   const [message, setMessage] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -22,7 +32,46 @@ const MessageInput = () => {
     }
   }, [message]);
 
-  const sendMessage = async (e) => {};
+  const sendMessage = async (e) => {
+    e.preventDefault();
+
+    if (!message) {
+      toast.error("Message cannot be empty.");
+      return;
+    }
+    setDisabled(true);
+
+    const messageData = {
+      chatId: selectedContact._id,
+      type: "text",
+      currentUser: currentUser.pubKey,
+      message: message.trim(),
+    };
+
+    const realtime = new Ably.Realtime({
+      token: ably.token,
+    });
+
+    realtime.connection.once("connected", () => {
+      const channel = realtime.channels.get(`chatId-${selectedContact._id}`);
+
+      channel.publish("message", messageData, (err) => {
+        if (err) {
+          console.error("Error publishing message:", err);
+        } else {
+          console.log("Message published successfully");
+        }
+      });
+    });
+
+    // axios.post(
+    //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`,
+    //   messageData
+    // );
+
+    setMessage("");
+    setDisabled(false);
+  };
 
   return (
     <form className="w-full flex justify-between pr-1 gap-2 bg-white">
@@ -39,21 +88,15 @@ const MessageInput = () => {
 
       <button
         type="submit"
-        className={`rounded-full flex justify-center items-center bg-[#ffd5b1] ${
+        className={`bg-black h-fit rounded-lg ${
           disabled ? "p-1.5 cursor-not-allowed" : "py-1.5 pl-2 pr-1"
         }`}
         onClick={(e) => sendMessage(e)}
       >
         {disabled ? (
-          <Image
-            src="/images/onboard/setup/loading.svg"
-            alt="Loading spinner"
-            width={20}
-            height={20}
-            className="animate-spin opacity-60"
-          />
+          <Loader2Icon className="h-5 w-5 text-white animate-spin" />
         ) : (
-          <PaperAirplaneIcon className="h-5 w-5 text-primary-white" />
+          <PaperAirplaneIcon className="h-5 w-5 text-white pr-0.5" />
         )}
       </button>
     </form>

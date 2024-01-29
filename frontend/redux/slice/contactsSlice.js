@@ -4,11 +4,19 @@ const contactsSlice = createSlice({
   name: "contacts",
 
   initialState: {
+    ably: null,
     contacts: [],
+    messages: [],
+    latestMessage: null,
     originalContacts: [],
+    selectedContact: null,
   },
 
   reducers: {
+    setAbly(state, action) {
+      state.ably = action.payload;
+    },
+
     setOriginalContacts(state, action) {
       state.originalContacts = action.payload;
     },
@@ -24,14 +32,35 @@ const contactsSlice = createSlice({
     addContact(state, action) {
       state.contacts.push(action.payload);
     },
+
+    setSelectedContact(state, action) {
+      state.selectedContact = action.payload;
+    },
+
+    setMessages(state, action) {
+      state.messages = action.payload;
+    },
+
+    addMessage(state, action) {
+      state.messages.push(action.payload);
+    },
+
+    setLatestMessage(state, action) {
+      state.latestMessage = action.payload;
+    },
   },
 });
 
 export const {
-  setContacts,
+  setAbly,
   addContact,
-  setOriginalContacts,
+  setContacts,
+  addMessage,
+  setMessages,
+  setLatestMessage,
+  setSelectedContact,
   addOriginalContact,
+  setOriginalContacts,
 } = contactsSlice.actions;
 
 export default contactsSlice.reducer;

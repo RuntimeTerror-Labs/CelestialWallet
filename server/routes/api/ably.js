@@ -9,6 +9,6 @@ const {
 
 router.route("/auth/:userId").get(ablyAuth);
 router.route("/disconnect").get(disconnectAbly);
-router.route("/create-channel").get(createChannel);
+router.route("/create-channel/:chatId").get(createChannel);
 
 module.exports = router;

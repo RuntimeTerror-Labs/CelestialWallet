@@ -16,30 +16,24 @@ const ably = new Ably.Realtime({
 
 const ablyAuth = (req, res) => {
   console.log("Successfully connected to the server auth endpoint");
+
   try {
     const { userId } = req.params;
 
-    const tokenRequestData = {
+    const tokenParams = {
       clientId: userId,
       capability: {
-        "*": ["subscribe"],
+        "*": ["publish", "subscribe"],
       },
     };
 
-    ably.auth.createTokenRequest(
-      tokenRequestData,
-      null,
-      (err, tokenRequest) => {
-        if (err) {
-          console.error("Error generating Ably token request:", err);
-          return res
-            .status(500)
-            .json({ error: "Error generating Ably token request" });
-        }
-
-        return res.status(200).json(tokenRequest);
+    ably.auth.requestToken(tokenParams, null, (err, tokenDetails) => {
+      if (err) {
+        console.error("Error generating Ably token:", err);
+        return res.status(500).json({ error: "Error generating Ably token" });
       }
-    );
+      return res.status(200).json(tokenDetails);
+    });
   } catch (error) {
     console.error("Internal Server Error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -63,13 +57,13 @@ const disconnectAbly = (req, res) => {
 
 const createChannel = async (req, res) => {
   try {
-    const { userId, currentUser } = req.body;
+    const { chatId } = req.params;
 
-    if (!userId || !currentUser) {
+    if (!chatId) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const channelName = `${userId}-${currentUser}`;
+    const channelName = `chatId-${chatId}`;
 
     const channel = ably.channels.get(channelName);
 
