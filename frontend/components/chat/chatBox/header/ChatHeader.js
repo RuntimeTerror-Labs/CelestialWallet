@@ -32,7 +32,7 @@ const ChatHeader = () => {
     chat?.users[0] === currentUser.pubKey ? chat?.users[1] : chat?.users[0];
 
   return (
-    <div className="flex justify-between items-center w-full py-2 px-5 relative z-10 bg-white border-b border-gray-200">
+    <div className="flex justify-between items-center w-full py-2 px-5 relative z-10 bg-white border-b rounded-xl shadow-xl border-gray-200">
       {chat ? (
         <div className="flex gap-3">
           <div className="w-11 h-11 aspect-square rounded-full overflow-hidden">
@@ -84,7 +84,7 @@ const ChatHeader = () => {
           </div>
 
           <div className="flex flex-col justify-center">
-            <h3 className="text-xl font-bold text-black">Celestial</h3>
+            <h3 className="text-xl font-bold text-black">@Celestial</h3>
           </div>
         </div>
       )}

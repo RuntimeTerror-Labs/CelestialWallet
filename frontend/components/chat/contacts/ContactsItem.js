@@ -8,8 +8,9 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import pubKeySlicer from "@/lib/pubKeySlicer";
 import { setSelectedContact } from "@/redux/slice/contactsSlice";
+
+import pubKeySlicer from "@/lib/pubKeySlicer";
 
 const ContactsItem = ({ chat }) => {
   let flag = true;

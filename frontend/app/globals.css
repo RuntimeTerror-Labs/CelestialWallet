@@ -35,23 +35,12 @@ body {
 }
 
 .chat-bg {
-  position: relative;
-  background-color: #fff;
-}
-
-.chat-bg::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  background-color: #ffffff;
   background-image: url(/chat/chat-bg.jpg);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  opacity: 0.5;
 }
 
 .payment-bg {

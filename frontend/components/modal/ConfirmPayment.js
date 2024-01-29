@@ -12,36 +12,35 @@ import {
 
 import Ably from "ably";
 import axios from "axios";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
+import { setPaymentAmount } from "@/redux/slice/dataSlice";
 import { togglePaymentModal } from "@/redux/slice/modalSlice";
 
-const ConfirmPayment = ({ user, amount, handlePayment }) => {
+const ConfirmPayment = () => {
   const dispatch = useDispatch();
 
-  const [address, setAddress] = useState("");
-
-  const open = useSelector((state) => state.modal.paymentModal);
-  const currentUser = useSelector((state) => state.user.user);
   const selectedContact = useSelector(
     (state) => state.contacts.selectedContact
   );
+  const ably = useSelector((state) => state.contacts.ably);
+  const currentUser = useSelector((state) => state.user.user);
+  const open = useSelector((state) => state.modal.paymentModal);
+  const paymentAmount = useSelector((state) => state.data.paymentAmount);
 
   const handleOpen = () => {
+    dispatch(setPaymentAmount(0));
     dispatch(togglePaymentModal(false));
   };
 
   const sendPayment = async (e) => {
     e.preventDefault();
 
-    if (!message) {
+    if (!paymentAmount) {
       toast.error("Message cannot be empty.");
       return;
     }
-
-    setDisabled(true);
 
     try {
       const realtime = new Ably.Realtime({
@@ -52,7 +51,7 @@ const ConfirmPayment = ({ user, amount, handlePayment }) => {
         const channel = realtime.channels.get(`chatId-${selectedContact._id}`);
 
         channel.publish("payment", {
-          content: message.trim(),
+          content: paymentAmount,
           createdAt: new Date().toISOString(),
           type: "payment",
           sender: currentUser.pubKey,
@@ -62,14 +61,13 @@ const ConfirmPayment = ({ user, amount, handlePayment }) => {
       axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`, {
         type: "payment",
         sender: currentUser.pubKey,
-        content: message.trim(),
+        content: paymentAmount,
         chat: selectedContact._id,
       });
 
-      setMessage("");
-      setDisabled(false);
+      handleOpen();
     } catch (error) {
-      toast.error("Error sending message.");
+      toast.error("Error sending Payment.");
     }
   };
 
@@ -92,15 +90,15 @@ const ConfirmPayment = ({ user, amount, handlePayment }) => {
               variant="paragraph"
               color="gray"
             >
-              Confirm payment of {amount} to {user}?
+              Confirm payment of $
+              <span className="font-bold text-red-500">{paymentAmount}</span>?
             </Typography>
 
             <Typography className="-mb-2" variant="h6">
               Address
             </Typography>
             <Input
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
+              value={currentUser.pubKey}
               readOnly
               label="Address"
               required
@@ -113,7 +111,7 @@ const ConfirmPayment = ({ user, amount, handlePayment }) => {
               Cancel
             </Button>
 
-            <Button variant="gradient" onClick={handlePayment}>
+            <Button variant="gradient" onClick={sendPayment}>
               Confirm
             </Button>
           </CardFooter>

@@ -4,12 +4,10 @@ import MessageInput from "./MessageInput";
 
 const SendMessageContainer = () => {
   return (
-    <div className="flex items-center z-10">
-      <div className="flex flex-1 items-center bg-white pl-5 border-t border-gray-200 py-2">
-        <ChatBubbleLeftIcon className="w-5 h-5" />
+    <div className="flex flex-1 z-10 items-center rounded-xl shadow-xl bg-white pl-5 border-t border-gray-200 py-2">
+      <ChatBubbleLeftIcon className="w-5 h-5" />
 
-        <MessageInput />
-      </div>
+      <MessageInput />
     </div>
   );
 };

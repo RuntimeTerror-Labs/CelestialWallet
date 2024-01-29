@@ -24,7 +24,7 @@ const MessageWithDate = ({ message, nextMessage, index }) => {
   return (
     <div>
       {index === 0 && (
-        <div className="text-center text-xs text-gray-800 font-medium my-2 font-sans">
+        <div className="text-center text-xs text-white font-bold my-2 font-sans">
           {messageDate}
         </div>
       )}
@@ -127,7 +127,7 @@ const MessageWithDate = ({ message, nextMessage, index }) => {
       </div>
 
       {nextMessageDate && messageDate !== nextMessageDate && (
-        <div className="text-center text-xs font-medium text-gray-800 my-2 font-sans">
+        <div className="text-center text-xs text-white font-bold my-2 font-sans">
           {nextMessageDate}
         </div>
       )}

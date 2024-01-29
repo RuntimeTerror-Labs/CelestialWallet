@@ -7,13 +7,11 @@ const ChatBox = () => {
     <>
       <ChatHeader />
 
-      <section className="h-full flex flex-col justify-between overflow-hidden relative chat-bg">
-        <div className="overflow-y-auto hide-scroll px-3 py-4">
-          <Chat />
-        </div>
+      <div className="overflow-y-auto hide-scroll px-3 py-4 rounded-xl shadow-xl flex-grow chat-bg">
+        <Chat />
+      </div>
 
-        <SendMessageContainer />
-      </section>
+      <SendMessageContainer />
     </>
   );
 };

@@ -5,14 +5,15 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import Ably from "ably";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
 import { Loader2Icon } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
+
+import { setPaymentAmount } from "@/redux/slice/dataSlice";
+import { togglePaymentModal } from "@/redux/slice/modalSlice";
 
 const MessageInput = () => {
   const dispatch = useDispatch();
-  const searchParams = useSearchParams();
 
   const selectedContact = useSelector(
     (state) => state.contacts.selectedContact
@@ -40,40 +41,18 @@ const MessageInput = () => {
       return;
     }
 
-    setDisabled(true);
-
-    try {
-      const realtime = new Ably.Realtime({
-        token: ably.token,
-      });
-
-      realtime.connection.once("connected", () => {
-        const channel = realtime.channels.get(`chatId-${selectedContact._id}`);
-
-        channel.publish("payment", {
-          content: message.trim(),
-          createdAt: new Date().toISOString(),
-          type: "payment",
-          sender: currentUser.pubKey,
-        });
-      });
-
-      axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`, {
-        type: "payment",
-        sender: currentUser.pubKey,
-        content: message.trim(),
-        chat: selectedContact._id,
-      });
-
-      setMessage("");
-      setDisabled(false);
-    } catch (error) {
-      toast.error("Error sending message.");
-    }
+    dispatch(setPaymentAmount(message));
+    dispatch(togglePaymentModal(true));
+    setMessage("");
   };
 
   const sendMessage = async (e) => {
     e.preventDefault();
+
+    if (!selectedContact) {
+      toast.error("Please select a contact first.");
+      return;
+    }
 
     if (!message) {
       toast.error("Message cannot be empty.");
@@ -123,7 +102,7 @@ const MessageInput = () => {
   };
 
   return (
-    <form className="w-full flex justify-between pr-1 gap-2 bg-white">
+    <form className="w-full flex justify-between items-center pr-2 gap-2 bg-white">
       <textarea
         ref={textareaRef}
         placeholder="Type your message here..."
@@ -133,6 +112,12 @@ const MessageInput = () => {
         rows={1}
         className="bg-transparent flex-1 pl-4 text-black focus:outline-none text-primary-white placeholder:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
         style={{ resize: "none", overflow: "hidden" }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage(e);
+          }
+        }}
       />
 
       {message && Number.isInteger(Number(message)) && (

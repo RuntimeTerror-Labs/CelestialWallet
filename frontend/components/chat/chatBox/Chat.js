@@ -122,7 +122,7 @@ const Chat = () => {
           </svg>
         </div>
       ) : messages?.length === 0 ? (
-        <div className="flex text-primary-white/60 py-2 px-6 bg-gray-100 rounded-lg mt-2 items-start">
+        <div className="flex text-primary-white/60 py-2 px-6 bg-gray-900 text-white rounded-lg mt-2 items-start">
           <p className="text-sm text-center flex mx-auto">
             Don't Share any personal information. This is a demo app. Messages
             are not encrypted.

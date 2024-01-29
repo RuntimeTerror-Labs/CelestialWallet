@@ -4,7 +4,7 @@ const modalSlice = createSlice({
   name: "modal",
 
   initialState: {
-    paymentModal: true,
+    paymentModal: false,
     newContactModal: false,
   },
 
