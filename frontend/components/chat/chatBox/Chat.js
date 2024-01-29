@@ -1,13 +1,13 @@
 "use client";
 
 import Ably from "ably";
+import axios from "axios";
 import { useRef } from "react";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import MessageWithDate from "../message/MessageWithDate";
-import axios from "axios";
 import { addMessage, setAbly, setMessages } from "@/redux/slice/contactsSlice";
 
 const Chat = () => {
@@ -16,8 +16,8 @@ const Chat = () => {
   const selectedContact = useSelector(
     (state) => state.contacts.selectedContact
   );
-  const ablyAuth = useSelector((state) => state.contacts.ably);
   const currentUser = useSelector((state) => state.user.user);
+  const ablyAuth = useSelector((state) => state.contacts.ably);
   const messages = useSelector((state) => state.contacts.messages);
   // const messagesContainerRef = useRef(null);
 
@@ -80,21 +80,25 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedContact) {
-      setLoading(true);
+    if (!selectedContact) return;
 
-      const ably = new Ably.Realtime({
-        token: ablyAuth.token,
-      });
+    setLoading(true);
 
-      const channel = ably.channels.get(`chatId-${selectedContact._id}`);
+    const ably = new Ably.Realtime({
+      token: ablyAuth.token,
+    });
 
-      channel.subscribe((message) => {
-        dispatch(addMessage(message.data));
-      });
+    const channel = ably.channels.get(`chatId-${selectedContact._id}`);
 
-      initializeChat();
-    }
+    channel.subscribe((message) => {
+      dispatch(addMessage(message.data));
+    });
+
+    initializeChat();
+
+    return () => {
+      channel.unsubscribe();
+    };
   }, [selectedContact]);
 
   // useEffect(() => {

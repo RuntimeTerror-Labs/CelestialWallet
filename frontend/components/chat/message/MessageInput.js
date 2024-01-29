@@ -32,6 +32,46 @@ const MessageInput = () => {
     }
   }, [message]);
 
+  const sendPayment = async (e) => {
+    e.preventDefault();
+
+    if (!message) {
+      toast.error("Message cannot be empty.");
+      return;
+    }
+
+    setDisabled(true);
+
+    try {
+      const realtime = new Ably.Realtime({
+        token: ably.token,
+      });
+
+      realtime.connection.once("connected", () => {
+        const channel = realtime.channels.get(`chatId-${selectedContact._id}`);
+
+        channel.publish("payment", {
+          content: message.trim(),
+          createdAt: new Date().toISOString(),
+          type: "payment",
+          sender: currentUser.pubKey,
+        });
+      });
+
+      axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`, {
+        type: "payment",
+        sender: currentUser.pubKey,
+        content: message.trim(),
+        chat: selectedContact._id,
+      });
+
+      setMessage("");
+      setDisabled(false);
+    } catch (error) {
+      toast.error("Error sending message.");
+    }
+  };
+
   const sendMessage = async (e) => {
     e.preventDefault();
 
@@ -68,10 +108,12 @@ const MessageInput = () => {
         );
       });
 
-      // axios.post(
-      //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`,
-      //   messageData
-      // );
+      axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`, {
+        type: "text",
+        sender: currentUser.pubKey,
+        content: message.trim(),
+        chat: selectedContact._id,
+      });
 
       setMessage("");
       setDisabled(false);
@@ -89,9 +131,21 @@ const MessageInput = () => {
         onChange={(e) => setMessage(e.target.value)}
         disabled={disabled}
         rows={1}
-        className="bg-transparent flex-1 pl-4 text-black focus:outline-none text-primary-white placeholder:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 max-h-56"
+        className="bg-transparent flex-1 pl-4 text-black focus:outline-none text-primary-white placeholder:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
         style={{ resize: "none", overflow: "hidden" }}
       />
+
+      {message && Number.isInteger(Number(message)) && (
+        <button
+          type="submit"
+          className={`bg-black h-fit rounded-lg w-20 py-1.5 text-white uppercase font-semibold ${
+            disabled ? "cursor-not-allowed" : "pl-2 pr-1"
+          }`}
+          onClick={(e) => sendPayment(e)}
+        >
+          Pay
+        </button>
+      )}
 
       <button
         type="submit"
