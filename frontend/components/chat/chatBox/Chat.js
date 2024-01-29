@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import MessageWithDate from "../message/MessageWithDate";
 import axios from "axios";
-import { setAbly, setMessages } from "@/redux/slice/contactsSlice";
+import { addMessage, setAbly, setMessages } from "@/redux/slice/contactsSlice";
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -16,6 +16,7 @@ const Chat = () => {
   const selectedContact = useSelector(
     (state) => state.contacts.selectedContact
   );
+  const ablyAuth = useSelector((state) => state.contacts.ably);
   const currentUser = useSelector((state) => state.user.user);
   const messages = useSelector((state) => state.contacts.messages);
   // const messagesContainerRef = useRef(null);
@@ -38,7 +39,7 @@ const Chat = () => {
       );
 
       dispatch(setMessages(filteredMessages));
-      console.log(messages);
+
       setLoading(false);
     } catch (err) {
       toast.error("Error fetching chat history");
@@ -81,6 +82,17 @@ const Chat = () => {
   useEffect(() => {
     if (selectedContact) {
       setLoading(true);
+
+      const ably = new Ably.Realtime({
+        token: ablyAuth.token,
+      });
+
+      const channel = ably.channels.get(`chatId-${selectedContact._id}`);
+
+      channel.subscribe((message) => {
+        dispatch(addMessage(message.data));
+      });
+
       initializeChat();
     }
   }, [selectedContact]);

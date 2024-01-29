@@ -5,7 +5,11 @@ const accessChat = async (req, res) => {
   const { currentUser, userId, message } = req.body;
 
   if (!userId) {
-    return res.status(400).json({ error: "UserId not found in req." });
+    return res.status(400).json({ error: "No user exist with this contact." });
+  }
+
+  if (!currentUser) {
+    return res.status(400).json({ error: "User not authenticated." });
   }
 
   try {
@@ -50,6 +54,10 @@ const accessChat = async (req, res) => {
 const fetchChats = async (req, res) => {
   const { pubKey } = req.params;
 
+  if (!pubKey) {
+    return res.status(400).json({ error: "User not authenticated." });
+  }
+
   try {
     const chats = await Chat.find({
       users: { $elemMatch: { $eq: pubKey } },
@@ -57,13 +65,16 @@ const fetchChats = async (req, res) => {
 
     res.status(200).json(chats);
   } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 
 const deleteChat = async (req, res) => {
   const { chatId } = req.params;
+
+  if (!chatId) {
+    return res.status(400).json({ error: "No chat exist with this contact." });
+  }
 
   try {
     const chat = await Chat.findByIdAndDelete(chatId);

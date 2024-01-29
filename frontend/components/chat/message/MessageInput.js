@@ -5,20 +5,20 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import Ably from "ably";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Loader2Icon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const MessageInput = () => {
+  const dispatch = useDispatch();
   const searchParams = useSearchParams();
 
   const selectedContact = useSelector(
     (state) => state.contacts.selectedContact
   );
-  const currentUser = useSelector((state) => state.user.user);
   const ably = useSelector((state) => state.contacts.ably);
-  const [ablyAuth, setAblyAuth] = useState(null);
+  const currentUser = useSelector((state) => state.user.user);
 
   const [message, setMessage] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -39,38 +39,45 @@ const MessageInput = () => {
       toast.error("Message cannot be empty.");
       return;
     }
+
     setDisabled(true);
 
-    const messageData = {
-      chatId: selectedContact._id,
-      type: "text",
-      currentUser: currentUser.pubKey,
-      message: message.trim(),
-    };
-
-    const realtime = new Ably.Realtime({
-      token: ably.token,
-    });
-
-    realtime.connection.once("connected", () => {
-      const channel = realtime.channels.get(`chatId-${selectedContact._id}`);
-
-      channel.publish("message", messageData, (err) => {
-        if (err) {
-          console.error("Error publishing message:", err);
-        } else {
-          console.log("Message published successfully");
-        }
+    try {
+      const realtime = new Ably.Realtime({
+        token: ably.token,
       });
-    });
 
-    // axios.post(
-    //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`,
-    //   messageData
-    // );
+      realtime.connection.once("connected", () => {
+        const channel = realtime.channels.get(`chatId-${selectedContact._id}`);
 
-    setMessage("");
-    setDisabled(false);
+        channel.publish(
+          "message",
+          {
+            content: message.trim(),
+            createdAt: new Date().toISOString(),
+            type: "text",
+            sender: currentUser.pubKey,
+          },
+          (err) => {
+            if (err) {
+              console.error("Error publishing message:", err);
+            } else {
+              console.log("Message sent successfully");
+            }
+          }
+        );
+      });
+
+      // axios.post(
+      //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/messages`,
+      //   messageData
+      // );
+
+      setMessage("");
+      setDisabled(false);
+    } catch (error) {
+      toast.error("Error sending message.");
+    }
   };
 
   return (

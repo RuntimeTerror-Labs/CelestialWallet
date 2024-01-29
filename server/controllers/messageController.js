@@ -1,31 +1,29 @@
 const Message = require("../schemas/messageSchema");
 
 const sendMessage = async (req, res) => {
-  const { chatId, message, type, currentUser } = req.body;
+  const { chat, content, type, sender } = req.body;
   // const currentUser = req.pubkey;
 
-  if (!chatId || !message) {
-    console.log("ChatId or message not sent with request");
-    return res.sendStatus(400);
+  if (!chat || !content) {
+    return res.sendStatus(400).json({ error: "ChatId or message not sent" });
   }
 
   const newMessage = {
     type,
-    sender: currentUser,
-    content: message,
-    chat: chatId,
+    sender,
+    content,
+    chat,
   };
 
   try {
-    let message = await Message.create(newMessage);
+    const message = await Message.create(newMessage);
 
     // message = await message.populate('sender');
     // message = await message.populate('chat');
 
     res.status(200).json(message);
   } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -33,28 +31,33 @@ const fetchMessages = async (req, res) => {
   const { chatId } = req.params;
 
   if (!chatId) {
-    console.log("ChatId not sent with request");
-    return res.sendStatus(400);
+    return res
+      .sendStatus(400)
+      .json({ error: "Chat Id not exist to fetch message." });
   }
 
   try {
     const messages = await Message.find({ chat: chatId });
 
     if (!messages) {
-      console.log("Contact not found");
-      return res.sendStatus(400);
+      return res.sendStatus(400).json({ error: "Chat not found" });
     }
 
     res.status(200).json(messages);
   } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 
 const fetchLatestMessage = async (req, res) => {
   try {
     const { chatId } = req.params;
+
+    if (!chatId) {
+      return res
+        .sendStatus(400)
+        .json({ error: "ChatId not sent with request" });
+    }
 
     const latestMessage = await Message.findOne({ chat: chatId })
       .sort({ updatedAt: -1 })
@@ -71,8 +74,7 @@ const deleteMessages = async (req, res) => {
   const { chatId } = req.params;
 
   if (!chatId) {
-    console.log("ChatId not sent with request");
-    return res.sendStatus(400);
+    return res.sendStatus(400).json({ error: "ChatId not sent with request" });
   }
 
   try {
@@ -85,8 +87,7 @@ const deleteMessages = async (req, res) => {
 
     res.status(200).json({ message: "Messages deleted successfully" });
   } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 

@@ -4,6 +4,12 @@ const createUser = async (req, res) => {
   try {
     const { username, pubKey } = req.body;
 
+    if (!username)
+      return res.status(400).json({ error: "Username not sent with request" });
+
+    if (!pubKey)
+      return res.status(400).json({ error: "PubKey not sent with request" });
+
     const existingUser = await User.findOne({ username });
 
     if (existingUser) {
@@ -29,6 +35,10 @@ const fetchUser = async (req, res) => {
   try {
     const { pubKey } = req.params;
 
+    if (!pubKey) {
+      return res.status(400).json({ error: "PubKey not sent with request" });
+    }
+
     const user = await User.findOne({ pubKey });
 
     if (!user) {
@@ -37,7 +47,6 @@ const fetchUser = async (req, res) => {
 
     return res.status(200).json(user);
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };

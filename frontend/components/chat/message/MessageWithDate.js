@@ -1,9 +1,11 @@
 "use client";
 
-import pubKeySlicer from "@/lib/pubKeySlicer";
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
+
 import React from "react";
 import { useSelector } from "react-redux";
+
+import pubKeySlicer from "@/lib/pubKeySlicer";
 
 const MessageWithDate = ({ message, nextMessage, index }) => {
   const currentUser = useSelector((state) => state.user.user);
