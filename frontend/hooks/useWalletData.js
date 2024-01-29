@@ -6,6 +6,7 @@ import {
   setBalance,
   setEthPrice,
   setMarketData,
+  setTransactions,
 } from "@/redux/slice/dataSlice";
 
 export default function useWalletData() {
@@ -34,5 +35,16 @@ export default function useWalletData() {
     }
   };
 
-  return { fetchBalance, fetchPrice };
+  const fetchTransactions = async (address) => {
+    try {
+      const res = await axios.get(
+        `https://pegasus.lightlink.io/api/v2/addresses/${address}/transactions?filter=to%20%7C%20from`
+      );
+      dispatch(setTransactions(res.data.items));
+    } catch (e) {
+      dispatch(setTransactions([]));
+    }
+  };
+
+  return { fetchBalance, fetchPrice, fetchTransactions };
 }

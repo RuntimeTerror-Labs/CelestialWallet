@@ -1,6 +1,7 @@
 import Balance from "@/components/layout/dashboard/Balance";
 import Logo from "@/components/layout/dashboard/Logo";
 import Signout from "@/components/layout/dashboard/Signout";
+import Transactions from "@/components/layout/dashboard/Transactions";
 
 export default function Dashboard() {
   return (
@@ -15,7 +16,9 @@ export default function Dashboard() {
         <div className="border-[1px] rounded-3xl h-full w-full row-span-2 col-span-2 shadow-lg">
           <Balance />
         </div>
-        <div className="border-[1px] border-black rounded-3xl h-full w-52 row-span-2"></div>
+        <div className="border-[1px] rounded-3xl shadow-lg border-blue-500 h-full w-52 row-span-2">
+          <Transactions />
+        </div>
         <div className="rounded-3xl h-40 w-52 shadow-lg">
           <Signout />
         </div>

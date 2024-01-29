@@ -28,19 +28,21 @@ export default function Balance() {
       <div className="flex justify-between items-end">
         <p className="text-5xl font-bold text-black/50 mt-5">Balance</p>
 
-        <div className="flexflex-col items-center">
+        <div className="flex flex-col items-center">
           <p className="text-black/50 text-sm">Last 24h</p>
           <p className="text-black/80 text-sm ml-2">
             {marketData &&
             marketData.length > 0 &&
-            marketData[1].closing_price > marketData[0].closing_price
+            marketData[0].closing_price > marketData[1].closing_price
               ? "+"
               : "-"}
             {Number(
               Math.abs(
                 marketData &&
                   marketData.length > 0 &&
-                  marketData[1].closing_price - marketData[0].closing_price
+                  ((marketData[0].closing_price - marketData[1].closing_price) /
+                    marketData[0].closing_price) *
+                    100
               )
             ).toFixed(2)}{" "}
             %
