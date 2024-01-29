@@ -34,6 +34,10 @@
     "type": "event"
   },
   {
+    "stateMutability": "payable",
+    "type": "fallback"
+  },
+  {
     "inputs": [],
     "name": "CELESTIAL_FACTORY",
     "outputs": [
@@ -67,6 +71,19 @@
         "internalType": "contract RecoveryUltraVerifier",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "email",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -151,6 +168,11 @@
         "internalType": "bytes32",
         "name": "_recoveryHash",
         "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "_email",
+        "type": "string"
       }
     ],
     "name": "executeChangeRecovery",
@@ -212,6 +234,11 @@
         "internalType": "bytes32",
         "name": "_recoveryHash",
         "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "_email",
+        "type": "string"
       }
     ],
     "name": "initialize",
@@ -451,5 +478,9 @@
     ],
     "stateMutability": "view",
     "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   }
 ]

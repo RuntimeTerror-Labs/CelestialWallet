@@ -75,6 +75,11 @@
         "type": "bytes32"
       },
       {
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
+      },
+      {
         "internalType": "uint256",
         "name": "salt",
         "type": "uint256"
@@ -146,6 +151,11 @@
         "internalType": "bytes32",
         "name": "_recoveryHash",
         "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
       }
     ],
     "name": "executeCelestialChangeRecovery",
@@ -238,6 +248,11 @@
         "internalType": "bytes32",
         "name": "recoveryHash",
         "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
       },
       {
         "internalType": "uint256",

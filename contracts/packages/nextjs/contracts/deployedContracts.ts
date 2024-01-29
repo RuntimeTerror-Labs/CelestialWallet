@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   1891: {
     CelestialFactory: {
-      address: "0x88a0b5C0AACBF567400B29632aA90b81e9a2f01f",
+      address: "0x0562eefAD05870Dd74dEE7d08a338182eB86De25",
       abi: [
         {
           inputs: [
@@ -85,6 +85,11 @@ const deployedContracts = {
               type: "bytes32",
             },
             {
+              internalType: "string",
+              name: "email",
+              type: "string",
+            },
+            {
               internalType: "uint256",
               name: "salt",
               type: "uint256",
@@ -156,6 +161,11 @@ const deployedContracts = {
               internalType: "bytes32",
               name: "_recoveryHash",
               type: "bytes32",
+            },
+            {
+              internalType: "string",
+              name: "email",
+              type: "string",
             },
           ],
           name: "executeCelestialChangeRecovery",
@@ -248,6 +258,11 @@ const deployedContracts = {
               internalType: "bytes32",
               name: "recoveryHash",
               type: "bytes32",
+            },
+            {
+              internalType: "string",
+              name: "email",
+              type: "string",
             },
             {
               internalType: "uint256",

@@ -76,6 +76,7 @@ export default function useSignup() {
         name + "@celestial",
         passwordHash,
         recoveryHashHex,
+        email,
         1,
       ]);
 

@@ -21,16 +21,14 @@ export default function WalletProvider({ children }) {
   }, [walletAddress]);
 
   useEffect(() => {
-    if (ethPrice) {
-      currentTimeout = setInterval(() => {
-        fetchPrice();
-        if (walletAddress) {
-          fetchBalance(walletAddress);
-          fetchTransactions(walletAddress);
-          fetchSavings(walletAddress);
-        }
-      }, 10000);
-    }
+    currentTimeout = setInterval(() => {
+      fetchPrice();
+      if (walletAddress) {
+        fetchBalance(walletAddress);
+        fetchTransactions(walletAddress);
+        fetchSavings(walletAddress);
+      }
+    }, 10000);
 
     return () => {
       clearInterval(currentTimeout);

@@ -15,7 +15,7 @@ export default function Transactions() {
         <p className="text-5xl text-blue-500/70 font-bold">Txs</p>
         {transactions &&
           transactions.length > 0 &&
-          transactions.slice(0).map((transaction, index) => {
+          transactions.slice(0, 2).map((transaction, index) => {
             return <TxMini tx={transaction} key={index} />;
           })}
         {transactions && transactions.length === 0 && (
