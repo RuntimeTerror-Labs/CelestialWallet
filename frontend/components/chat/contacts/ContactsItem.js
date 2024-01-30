@@ -29,11 +29,11 @@ const ContactsItem = ({ chat }) => {
     chat.users[0] === currentUser.pubKey ? chat.users[1] : chat.users[0];
 
   useEffect(() => {
-    const userChannel = ablyAuth.channels.get(`user`);
+    const userChannel = ablyAuth.channels.get(`user-${user}`);
 
     userChannel.presence.subscribe((presenceMsg) => {
+      console.log(presenceMsg);
       if (presenceMsg.clientId === user) {
-        dispatch(presenceMsg.action);
         setStatus(presenceMsg.action);
       }
     });
@@ -64,6 +64,7 @@ const ContactsItem = ({ chat }) => {
 
   const handleContactClick = () => {
     dispatch(setSelectedContact(chat));
+    dispatch(setSelectedPresence(status));
   };
 
   return (
