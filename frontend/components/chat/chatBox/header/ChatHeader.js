@@ -77,14 +77,16 @@ const ChatHeader = () => {
           <div className="w-11 h-11 aspect-square rounded-full overflow-hidden">
             <Avatar
               size={44}
-              name="Celestial"
-              variant="marble"
+              name={currentUser.pubKey}
+              variant="bauhaus"
               colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
             />
           </div>
 
           <div className="flex flex-col justify-center">
-            <h3 className="text-xl font-bold text-black">@Celestial</h3>
+            <h3 className="text-xl font-bold text-black">
+              {currentUser.username}
+            </h3>
           </div>
         </div>
       )}

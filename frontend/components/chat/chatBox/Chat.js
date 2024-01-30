@@ -111,7 +111,7 @@ const Chat = () => {
   // }, [messageHistory]);
 
   return selectedContact ? (
-    <div className="mb-6 flex-1 relative font-uni">
+    <div className={`mb-6 flex-1 relative`}>
       {loading ? (
         <div className="text-primary-white/60 z-10 w-fit mx-auto">
           <svg
@@ -144,8 +144,8 @@ const Chat = () => {
       )}
     </div>
   ) : (
-    <div>
-      <p className="text-center text-2xl font-bold text-gray-700 text-primary-black">
+    <div className="flex text-primary-white/60 py-2 px-20 bg-gray-900/70 w-fit mx-auto text-white rounded-lg mt-2 items-start">
+      <p className="text-base font-bold text-center flex mx-auto">
         Select a contact to start messaging
       </p>
     </div>

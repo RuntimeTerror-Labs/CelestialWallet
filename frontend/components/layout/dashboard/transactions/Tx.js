@@ -86,7 +86,7 @@ export default function TxMini({ tx }) {
             {((tx.value / 10 ** 18) * ethPrice).toFixed(3)}
           </p>
 
-          <p className="font-semibold text-black/50">
+          <p className="font-semibold text-black/50 uppercase">
             {new Date(tx.timestamp).toLocaleString()}
           </p>
         </div>
