@@ -5,6 +5,7 @@ import { BarretenbergBackend } from "@noir-lang/backend_barretenberg";
 import passkeyHash from "@/lib/circuits/passkey_hash.json";
 import recoveryHash from "@/lib/circuits/recovery_hash.json";
 import passkeyProve from "@/lib/circuits/passkey_prove.json";
+import recoveryProve from "@/lib/circuits/recovery_prove.json";
 import { ethers } from "ethers";
 
 export default function useCircuits() {
@@ -61,5 +62,34 @@ export default function useCircuits() {
     return ethers.utils.hexlify(output.proof);
   };
 
-  return { hashPassword, hashRecovery, passkey_prove };
+  const recovery_prove = async (pubkeyx, pubkeyy, signature, message) => {
+    try {
+      const backend = new BarretenbergBackend(recoveryProve, {
+        threads: navigator.hardwareConcurrency,
+      });
+
+      const recoveryHash = await hashRecovery(pubkeyx);
+      const uint8Array = new Uint8Array(recoveryHash);
+
+      signature.pop();
+
+      const inputs = {
+        pub_key_x: Array.from(ethers.utils.arrayify(pubkeyx)),
+        pub_key_y: Array.from(ethers.utils.arrayify(pubkeyy)),
+        signature: signature,
+        hashed_message: message,
+        pub_key_x_hash: Array.from(uint8Array),
+      };
+
+      const noir = new Noir(recoveryProve, backend);
+
+      const output = await noir.generateFinalProof(inputs);
+
+      return ethers.utils.hexlify(output.proof);
+    } catch (e) {
+      return false;
+    }
+  };
+
+  return { hashPassword, hashRecovery, passkey_prove, recovery_prove };
 }
