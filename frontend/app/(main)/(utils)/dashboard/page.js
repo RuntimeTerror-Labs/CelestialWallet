@@ -23,10 +23,10 @@ export default function Dashboard() {
         <div className="border-[1px] bg-white rounded-3xl h-full w-52 row-span-2 shadow-lg">
           <Info />
         </div>
-        <div className="border-[1px] rounded-3xl h-40 w-52">
+        <div className="border-[1px] rounded-3xl h-[9.7rem] w-52">
           <Transfer />
         </div>
-        <div className="border-[1px] rounded-3xl h-40 w-52 shadow-lg">
+        <div className="border-[1px] rounded-3xl h-[9.7rem] w-52 shadow-lg">
           <Logo />
         </div>
         <div className="border-[1px] rounded-3xl h-full w-52 row-span-2">
@@ -38,13 +38,13 @@ export default function Dashboard() {
         <div className="border-[1px] rounded-3xl shadow-lg border-blue-500 h-full w-52 row-span-2">
           <Transactions />
         </div>
-        <div className="rounded-3xl h-40 w-52 shadow-lg">
+        <div className="rounded-3xl h-[9.7rem] w-52 shadow-lg">
           <Signout />
         </div>
-        <div className="border-[1px] rounded-3xl h-40 w-52">
+        <div className="border-[1px] rounded-3xl h-[9.7rem] w-52">
           <Deposit />
         </div>
-        <div className="rounded-3xl h-40 w-full col-span-2">
+        <div className="rounded-3xl h-[9.7rem] w-full col-span-2">
           <EmailChange />
         </div>
       </div>

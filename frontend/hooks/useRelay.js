@@ -75,7 +75,7 @@ export default function useRelay() {
     };
 
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}api/relay`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/relay`,
       {
         forwardRequest,
       },

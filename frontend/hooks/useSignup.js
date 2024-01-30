@@ -40,11 +40,7 @@ export default function useSignup() {
       const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
       const signer = provider.getSigner();
 
-      const signature = await signer.signMessage(
-        ethers.utils.hashMessage(
-          ethers.utils.toUtf8Bytes("Celestial_New_User_Sign_Up")
-        )
-      );
+      const signature = await signer.signMessage("Celestial_New_User_Sign_Up");
 
       const body = {
         signature,
@@ -52,7 +48,7 @@ export default function useSignup() {
       };
 
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/utils/recovery/inputs`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/utils/recovery/inputs`,
         body
       );
 
@@ -81,7 +77,9 @@ export default function useSignup() {
       ]);
 
       const txId = await execute(data);
+
       console.log(txId);
+
       toast.success("Account created!");
 
       const wallet = await factory.getCelestial(name + "@celestial");
