@@ -37,7 +37,7 @@ export default function ChangeEmail() {
         handler={() => {}}
         className="bg-transparent shadow-none"
       >
-        <div className="h-full w-full flex flex-col justify-center bg-white rounded-3xl pt-20 pb-5 items-center relative">
+        <div className="h-full w-full flex flex-col justify-center bg-white rounded-3xl pt-20 px-20 items-center relative">
           <Card className="w-96 shadow-none bg-transparent">
             <CardHeader className="bg-transparent flex justify-center shadow-none">
               <Image

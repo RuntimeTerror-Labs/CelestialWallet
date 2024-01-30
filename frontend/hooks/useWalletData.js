@@ -40,7 +40,15 @@ export default function useWalletData() {
       const res = await axios.get(
         `https://pegasus.lightlink.io/api/v2/addresses/${address}/transactions?filter=to%20%7C%20from`
       );
-      dispatch(setTransactions(res.data.items));
+      const res2 = await axios.get(
+        `https://pegasus.lightlink.io/api/v2/addresses/${address}/internal-transactions?filter=to%20%7C%20from`
+      );
+      let transactions = res.data.items.concat(res2.data.items);
+      const filteredTx = transactions.filter((tx) => tx.to !== null);
+      const sortedTx = filteredTx.sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
+      dispatch(setTransactions(sortedTx));
     } catch (e) {
       dispatch(setTransactions([]));
     }

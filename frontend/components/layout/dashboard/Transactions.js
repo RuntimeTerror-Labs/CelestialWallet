@@ -4,6 +4,12 @@ import { useSelector } from "react-redux";
 import TxMini from "./transactions/TxMini";
 import { Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
+import { Urbanist } from "next/font/google";
+
+const urbanist = Urbanist({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function Transactions() {
   const transactions = useSelector((state) => state.data.transactions);
@@ -28,7 +34,9 @@ export default function Transactions() {
       {transactions && transactions.length > 0 && (
         <div className="w-full z-10">
           <Button
-            className="rounded-2xl z-10 w-full bg-blue-500/80"
+            className={
+              "rounded-2xl z-10 w-full bg-blue-500/80 " + urbanist.className
+            }
             onClick={() => {
               router.push("/transactions");
             }}

@@ -1,26 +1,29 @@
 "use client";
 
 import { Urbanist } from "next/font/google";
-
 import {
-  Button,
   Dialog,
   Card,
   CardBody,
   CardFooter,
   Typography,
-  Input,
   CardHeader,
+  Stepper,
+  Step,
 } from "@material-tailwind/react";
-
-import axios from "axios";
-import { useState } from "react";
-import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-
 import { toggleTransferModal } from "@/redux/slice/modalSlice";
-
 import Image from "next/image";
+import { Bolt, MapPin, Send } from "lucide-react";
+import Step0 from "./transfer/Step0";
+import Step1 from "./transfer/Step1";
+import Step2 from "./transfer/Step2";
+import {
+  setAddress,
+  setAmount,
+  setDomain,
+  setStep,
+} from "@/redux/slice/transferSlice";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -29,11 +32,8 @@ const urbanist = Urbanist({
 
 const TransferModal = () => {
   const dispatch = useDispatch();
-
-  const [amount, setAmount] = useState("");
-  const [address, setAddress] = useState("");
-
   const open = useSelector((state) => state.modal.transferModal);
+  const step = useSelector((state) => state.transfer.step);
 
   const handleOpen = () => {
     dispatch(toggleTransferModal(false));
@@ -55,59 +55,24 @@ const TransferModal = () => {
             </CardHeader>
 
             <CardBody className="flex flex-col gap-4 -mt-2">
-              <div className="text-center">
-                <Typography variant="h4" color="blue-gray">
-                  Transfer
-                </Typography>
+              <Stepper activeStep={step} className="mb-3">
+                <Step className="">
+                  <MapPin className="h-5 w-5" />
+                </Step>
+                <Step className="">
+                  <Bolt className="h-5 w-5" />
+                </Step>
+                <Step className="">
+                  <Send className="h-5 w-5" />
+                </Step>
+              </Stepper>
 
-                <Typography
-                  className="mb-3 font-normal"
-                  variant="paragraph"
-                  color="gray"
-                >
-                  Send token from your wallet to another wallet.
-                </Typography>
-              </div>
-
-              <div className="space-y-3">
-                <Typography className="-mb-2" variant="h6">
-                  Amount
-                </Typography>
-                <Input
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  label="Token Amount"
-                  required
-                  size="lg"
-                />
-              </div>
-
-              <div className="space-y-3">
-                <Typography className="-mb-2" variant="h6">
-                  Address
-                </Typography>
-                <Input
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  label="Receiver's Address"
-                  required
-                  size="lg"
-                />
-              </div>
+              {step === 0 && <Step0 />}
+              {step === 1 && <Step1 />}
+              {step === 2 && <Step2 />}
             </CardBody>
 
             <CardFooter className="pt-0 -mt-7">
-              <Button
-                variant="gradient"
-                fullWidth
-                className={
-                  urbanist.className + " flex items-center mt-5 justify-center"
-                }
-                onClick={() => {}}
-              >
-                Transfer
-              </Button>
-
               <Typography
                 variant="small"
                 className={"mt-4 flex justify-center " + urbanist.className}
@@ -119,7 +84,13 @@ const TransferModal = () => {
                   className={
                     "ml-1 font-bold hover:cursor-pointer " + urbanist.className
                   }
-                  onClick={handleOpen}
+                  onClick={() => {
+                    handleOpen();
+                    dispatch(setStep(0));
+                    dispatch(setAmount(""));
+                    dispatch(setAddress(""));
+                    dispatch(setDomain(""));
+                  }}
                 >
                   Dashboard
                 </Typography>

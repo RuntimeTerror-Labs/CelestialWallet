@@ -8,6 +8,7 @@ import signupReducer from "./slice/signupSlice";
 import contactReducer from "./slice/contactsSlice";
 import dataReducer from "./slice/dataSlice";
 import changeEmailReducer from "./slice/changeEmailSlice";
+import transferReducer from "./slice/transferSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     contacts: contactReducer,
     data: dataReducer,
     changeEmail: changeEmailReducer,
+    transfer: transferReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

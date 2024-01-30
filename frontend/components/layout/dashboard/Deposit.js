@@ -4,13 +4,21 @@ import { toggleDepositModal } from "@/redux/slice/modalSlice";
 import { Button } from "@material-tailwind/react";
 import { ArrowDownLeft } from "lucide-react";
 import { useDispatch } from "react-redux";
+import { Urbanist } from "next/font/google";
+
+const urbanist = Urbanist({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function Deposit() {
   const dispatch = useDispatch();
 
   return (
     <Button
-      className="p-0 bg-transparent h-full w-full"
+      className={
+        "p-0 bg-transparent h-full w-full rounded-3xl " + urbanist.className
+      }
       onClick={() => dispatch(toggleDepositModal(true))}
     >
       <div className="border-[1px] border-indigo-500 hover:border-black h-full w-full hover:cursor-pointer bg-white transition duration-300 hover:bg-black rounded-3xl overflow-hidden group relative p-4">
