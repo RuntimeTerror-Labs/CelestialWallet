@@ -34,7 +34,7 @@ const ChatHeader = () => {
 
   const status =
     presence.user === user
-      ? presence.status === "enter"
+      ? presence.action === "enter"
         ? "enter"
         : "leave"
       : "leave";
@@ -52,8 +52,10 @@ const ChatHeader = () => {
             />
 
             <div
-              className={`absolute top-0.5 right-0 border-black border rounded-full w-3 h-3 ${
-                status === "enter" ? "bg-green-300" : "bg-[#DF0000]"
+              className={`absolute top-0.5 right-0 border rounded-full w-3 h-3 ${
+                status === "enter"
+                  ? "bg-green-300 border-green-700"
+                  : "bg-red-400 border-red-800"
               }`}
             ></div>
           </div>

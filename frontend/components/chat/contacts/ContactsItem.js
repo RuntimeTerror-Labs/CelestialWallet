@@ -16,20 +16,29 @@ const ContactsItem = ({ chat }) => {
   let flag = true;
   const dispatch = useDispatch();
 
+  const [status, setStatus] = useState(null);
   const [message, setMessage] = useState(null);
 
   const currentUser = useSelector((state) => state.user.user);
-  const presence = useSelector((state) => state.contacts.presence);
+  const ablyAuth = useSelector((state) => state.contacts.ablyAuth);
 
   const user =
     chat.users[0] === currentUser.pubKey ? chat.users[1] : chat.users[0];
 
-  const status =
-    presence.user === user
-      ? presence.status === "enter"
-        ? "enter"
-        : "leave"
-      : "leave";
+  useEffect(() => {
+    const userChannel = ablyAuth.channels.get(`user-${user}`);
+
+    userChannel.presence.subscribe((presenceMsg) => {
+      console.log(presenceMsg);
+      if (presenceMsg.clientId === user) {
+        setStatus(presenceMsg.action);
+      }
+    });
+
+    return () => {
+      userChannel.presence.unsubscribe();
+    };
+  }, [ablyAuth, dispatch]);
 
   useEffect(() => {
     const fetchMessage = async () => {
@@ -69,8 +78,10 @@ const ContactsItem = ({ chat }) => {
           />
 
           <div
-            className={`absolute top-0.5 right-0 border-black border rounded-full w-3 h-3 ${
-              status === "enter" ? "bg-green-300" : "bg-[#DF0000]"
+            className={`absolute top-0.5 right-0 border rounded-full w-3 h-3 ${
+              status === "enter"
+                ? "bg-green-300 border-green-700"
+                : "bg-red-400 border-red-800"
             }`}
           ></div>
         </div>

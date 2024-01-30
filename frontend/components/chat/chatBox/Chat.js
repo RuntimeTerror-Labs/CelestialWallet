@@ -80,7 +80,11 @@ const Chat = () => {
 
     setAblyClient();
 
+    const userChannel = realtime.channels.get(`user-${currentUser.pubKey}`);
+    userChannel.presence.enter();
+
     return () => {
+      userChannel.presence.leave();
       axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/ably/disconnect`);
       dispatch(setAbly(null));
     };
@@ -106,6 +110,7 @@ const Chat = () => {
           : selectedContact.users[0];
 
       if (presenceMsg.clientId === user) {
+        console.log(presenceMsg.action);
         dispatch(
           setPresence({
             user: presenceMsg.clientId,
@@ -118,7 +123,7 @@ const Chat = () => {
     initializeChat();
 
     return () => {
-      channel.presence.leave();
+      // channel.presence.leave();
       channel.unsubscribe();
     };
   }, [selectedContact]);
