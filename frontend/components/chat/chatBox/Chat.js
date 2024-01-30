@@ -80,7 +80,7 @@ const Chat = () => {
 
     setAblyClient();
 
-    const userChannel = realtime.channels.get(`user-${currentUser.pubKey}`);
+    const userChannel = realtime.channels.get(`user`);
     userChannel.presence.enter();
 
     return () => {
@@ -101,24 +101,24 @@ const Chat = () => {
       dispatch(addMessage(message.data));
     });
 
-    channel.presence.enter();
+    // channel.presence.enter();
 
-    channel.presence.subscribe((presenceMsg) => {
-      const user =
-        selectedContact.users[0] === currentUser.pubKey
-          ? selectedContact.users[1]
-          : selectedContact.users[0];
+    // channel.presence.subscribe((presenceMsg) => {
+    //   const user =
+    //     selectedContact.users[0] === currentUser.pubKey
+    //       ? selectedContact.users[1]
+    //       : selectedContact.users[0];
 
-      if (presenceMsg.clientId === user) {
-        console.log(presenceMsg.action);
-        dispatch(
-          setPresence({
-            user: presenceMsg.clientId,
-            action: presenceMsg.action,
-          })
-        );
-      }
-    });
+    //   if (presenceMsg.clientId === user) {
+    //     console.log(presenceMsg.action);
+    //     dispatch(
+    //       setPresence({
+    //         user: presenceMsg.clientId,
+    //         action: presenceMsg.action,
+    //       })
+    //     );
+    //   }
+    // });
 
     initializeChat();
 
