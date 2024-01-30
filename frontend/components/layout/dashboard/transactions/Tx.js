@@ -16,6 +16,7 @@ export default function TxMini({ tx }) {
 
   const [isClicked, setIsClicked] = useState(false);
 
+  if (tx.to === null) return;
   if (tx.to.hash === PasskeyUltraVerifier) return;
   if (tx.to.hash === RecoveryUltraVerifier) return;
   return (

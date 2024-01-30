@@ -44,10 +44,17 @@ export default function useWalletData() {
         `https://pegasus.lightlink.io/api/v2/addresses/${address}/internal-transactions?filter=to%20%7C%20from`
       );
       let transactions = res.data.items.concat(res2.data.items);
-      const filteredTx = transactions.filter((tx) => tx.to !== null);
+
+      const filteredTx = transactions.filter((tx) => {
+        return tx.to !== null
+          ? tx.to.hash !== "0x05a5Ff5B301DAeEfff853f9A350753763E67329E"
+          : false;
+      });
+
       const sortedTx = filteredTx.sort(
         (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
       );
+
       dispatch(setTransactions(sortedTx));
     } catch (e) {
       dispatch(setTransactions([]));

@@ -6,6 +6,7 @@ export default function TxMini({ tx }) {
   const walletAddress = useSelector((state) => state.user.user.pubKey);
   const ethPrice = useSelector((state) => state.data.ethPrice);
 
+  if (tx.to === null) return;
   return (
     <div className="flex w-full mt-4 rounded-2xl h-[70px] bg-white border-blue-500/70 hover:shadow-lg transition duration-300 border-[1px]">
       <div className=" flex h-full w-full items-center justify-between px-2">
