@@ -19,9 +19,17 @@ const ContactsItem = ({ chat }) => {
   const [message, setMessage] = useState(null);
 
   const currentUser = useSelector((state) => state.user.user);
+  const presence = useSelector((state) => state.contacts.presence);
 
   const user =
     chat.users[0] === currentUser.pubKey ? chat.users[1] : chat.users[0];
+
+  const status =
+    presence.user === user
+      ? presence.status === "enter"
+        ? "enter"
+        : "leave"
+      : "leave";
 
   useEffect(() => {
     const fetchMessage = async () => {
@@ -52,13 +60,19 @@ const ContactsItem = ({ chat }) => {
       onClick={handleContactClick}
     >
       <div className="flex items-center my-2">
-        <div className="w-10 h-10 bg-red-200 rounded-full mr-3 overflow-hidden">
+        <div className="w-10 h-10 mr-3 relative">
           <Avatar
             size={40}
             name={user}
             variant="marble"
             colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
           />
+
+          <div
+            className={`absolute top-0.5 right-0 border-black border rounded-full w-3 h-3 ${
+              status === "enter" ? "bg-green-300" : "bg-[#DF0000]"
+            }`}
+          ></div>
         </div>
 
         <div>
