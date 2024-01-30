@@ -23,7 +23,7 @@ const ablyAuth = (req, res) => {
     const tokenParams = {
       clientId: userId,
       capability: {
-        "*": ["publish", "subscribe"],
+        "*": ["publish", "subscribe", "presence"],
       },
     };
 

@@ -27,6 +27,7 @@ const HeaderLoader = () => {
 const ChatHeader = () => {
   const currentUser = useSelector((state) => state.user.user);
   const chat = useSelector((state) => state.contacts.selectedContact);
+  const status = useSelector((state) => state.contacts.presence);
 
   const user =
     chat?.users[0] === currentUser.pubKey ? chat?.users[1] : chat?.users[0];
@@ -35,20 +36,20 @@ const ChatHeader = () => {
     <div className="flex justify-between items-center w-full py-2 px-5 relative z-10 bg-white border-b rounded-xl shadow-xl border-gray-200">
       {chat ? (
         <div className="flex gap-3">
-          <div className="w-11 h-11 aspect-square rounded-full overflow-hidden">
+          <div className="w-11 h-11 relative">
             <Avatar
               size={44}
               name={user}
               variant="marble"
               colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
             />
-          </div>
 
-          {/* <div
-          className={`absolute top-0.5 right-1 border-primary-white border rounded-full w-1.5 h-1.5 ${
-            status === "online" ? "bg-gradient-primary" : "bg-[#DF0000]"
-          }`}
-        ></div> */}
+            <div
+              className={`absolute top-0.5 right-0 border-black border rounded-full w-3 h-3 ${
+                status === "enter" ? "bg-green-300" : "bg-[#DF0000]"
+              }`}
+            ></div>
+          </div>
 
           <div className="flex flex-col justify-center">
             <h3 className="text-xl font-bold text-black">{user}</h3>

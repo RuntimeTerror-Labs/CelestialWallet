@@ -2,12 +2,11 @@
 
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
-import Ably from "ably";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Loader2Icon } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setPaymentAmount } from "@/redux/slice/dataSlice";
 import { togglePaymentModal } from "@/redux/slice/modalSlice";
@@ -18,8 +17,8 @@ const MessageInput = () => {
   const selectedContact = useSelector(
     (state) => state.contacts.selectedContact
   );
-  const ably = useSelector((state) => state.contacts.ablyAuth);
   const currentUser = useSelector((state) => state.user.user);
+  const ably = useSelector((state) => state.contacts.ablyAuth);
 
   const [message, setMessage] = useState("");
   const [disabled, setDisabled] = useState(false);

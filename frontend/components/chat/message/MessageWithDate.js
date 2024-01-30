@@ -134,4 +134,5 @@ const MessageWithDate = ({ message, nextMessage, index }) => {
     </div>
   );
 };
+
 export default MessageWithDate;

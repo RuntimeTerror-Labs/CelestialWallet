@@ -13,6 +13,7 @@ import {
   setAbly,
   setAblyAuth,
   setMessages,
+  setPresence,
 } from "@/redux/slice/contactsSlice";
 
 const Chat = () => {
@@ -69,6 +70,8 @@ const Chat = () => {
     const realtime = new Ably.Realtime({ authCallback });
     dispatch(setAblyAuth(realtime));
 
+    let channel;
+
     const setAblyClient = async () => {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/ably/auth/${currentUser.pubKey}`
@@ -80,6 +83,7 @@ const Chat = () => {
     setAblyClient();
 
     return () => {
+      channel?.presence?.leave();
       axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/ably/disconnect`);
       dispatch(setAbly(null));
     };
@@ -96,9 +100,25 @@ const Chat = () => {
       dispatch(addMessage(message.data));
     });
 
+    channel.presence.enter();
+
+    channel.presence.subscribe((presenceMsg) => {
+      const user =
+        selectedContact.users[0] === currentUser.pubKey
+          ? selectedContact.users[1]
+          : selectedContact.users[0];
+
+      console.log(presenceMsg);
+
+      if (presenceMsg.clientId === user) {
+        setOtherUserStatus(presenceMsg.action);
+      }
+    });
+
     initializeChat();
 
     return () => {
+      channel.presence.leave();
       channel.unsubscribe();
     };
   }, [selectedContact]);

@@ -1,14 +1,14 @@
 "use client";
 
 import {
+  Card,
+  Input,
   Button,
   Dialog,
-  Card,
+  Textarea,
   CardBody,
   CardFooter,
   Typography,
-  Input,
-  Textarea,
 } from "@material-tailwind/react";
 
 import axios from "axios";
@@ -16,8 +16,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
-import { addContact, addOriginalContact } from "@/redux/slice/contactsSlice";
 import { toggleNewContactModal } from "@/redux/slice/modalSlice";
+import { addContact, addOriginalContact } from "@/redux/slice/contactsSlice";
 
 const CreateContact = () => {
   const dispatch = useDispatch();
