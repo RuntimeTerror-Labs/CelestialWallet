@@ -7,6 +7,7 @@ const contactsSlice = createSlice({
     ably: null,
     ablyAuth: null,
     presence: "leave",
+    selectedPresence: "leave",
     contacts: [],
     messages: [],
     latestMessage: null,
@@ -58,6 +59,10 @@ const contactsSlice = createSlice({
     setAblyAuth(state, action) {
       state.ablyAuth = action.payload;
     },
+
+    setSelectedPresence(state, action) {
+      state.selectedPresence = action.payload;
+    },
   },
 });
 
@@ -73,6 +78,7 @@ export const {
   setSelectedContact,
   addOriginalContact,
   setOriginalContacts,
+  setSelectedPresence,
 } = contactsSlice.actions;
 
 export default contactsSlice.reducer;

@@ -27,17 +27,10 @@ const HeaderLoader = () => {
 const ChatHeader = () => {
   const currentUser = useSelector((state) => state.user.user);
   const chat = useSelector((state) => state.contacts.selectedContact);
-  const presence = useSelector((state) => state.contacts.presence);
+  const presence = useSelector((state) => state.contacts.selectedPresence);
 
   const user =
     chat?.users[0] === currentUser.pubKey ? chat?.users[1] : chat?.users[0];
-
-  const status =
-    presence.user === user
-      ? presence.action === "enter"
-        ? "enter"
-        : "leave"
-      : "leave";
 
   return (
     <div className="flex justify-between items-center w-full py-2 px-5 relative z-10 bg-white border-b rounded-xl shadow-xl border-gray-200">
@@ -53,7 +46,7 @@ const ChatHeader = () => {
 
             <div
               className={`absolute top-0.5 right-0 border rounded-full w-3 h-3 ${
-                status === "enter"
+                presence === "enter" || presence === "present"
                   ? "bg-green-300 border-green-700"
                   : "bg-red-400 border-red-800"
               }`}

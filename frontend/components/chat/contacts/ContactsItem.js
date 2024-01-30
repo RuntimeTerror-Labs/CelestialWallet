@@ -8,7 +8,10 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setSelectedContact } from "@/redux/slice/contactsSlice";
+import {
+  setSelectedContact,
+  setSelectedPresence,
+} from "@/redux/slice/contactsSlice";
 
 import pubKeySlicer from "@/lib/pubKeySlicer";
 
@@ -61,6 +64,7 @@ const ContactsItem = ({ chat }) => {
 
   const handleContactClick = () => {
     dispatch(setSelectedContact(chat));
+    dispatch(setSelectedPresence(status));
   };
 
   return (
@@ -79,7 +83,7 @@ const ContactsItem = ({ chat }) => {
 
           <div
             className={`absolute top-0.5 right-0 border rounded-full w-3 h-3 ${
-              status === "enter"
+              status === "enter" || status === "present"
                 ? "bg-green-300 border-green-700"
                 : "bg-red-400 border-red-800"
             }`}
