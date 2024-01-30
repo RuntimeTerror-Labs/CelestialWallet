@@ -25,6 +25,7 @@ export default function useChangeEmail() {
   const proof = useSelector((state) => state.changeEmail.proof);
   const name = useSelector((state) => state.user.user.username);
   const { execute } = useRelay();
+  const { hashRecovery } = useCircuits();
 
   const verifyCurrentEmail = async (email) => {
     dispatch(setIsLoading(true));
@@ -87,6 +88,7 @@ export default function useChangeEmail() {
   };
 
   const changeEmail = async (email) => {
+    dispatch(setIsLoading(true));
     try {
       const magic = new Magic("pk_live_EC906C44C94A9773");
       await magic.auth.loginWithEmailOTP({ email });
@@ -135,19 +137,17 @@ export default function useChangeEmail() {
 
       const txId = await execute(data);
 
-      if (txId.data.success === false) {
-        dispatch(setIsLoading(false));
-        toast.error("Something went wrong!");
-        return;
-      }
+      console.log(txId);
 
       toast.success("Email Changed!");
 
       dispatch(setIsLoading(false));
       dispatch(handleDialog());
       dispatch(handleStep(0));
-    } catch {
+    } catch (e) {
+      console.log(e);
       toast.error("Something Went Wrong!");
+      dispatch(setIsLoading(false));
       return;
     }
   };

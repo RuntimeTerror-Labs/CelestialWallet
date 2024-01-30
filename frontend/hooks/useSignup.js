@@ -77,11 +77,8 @@ export default function useSignup() {
       ]);
 
       const txId = await execute(data);
-      if (txId.data.success === false) {
-        dispatch(setIsLoading(false));
-        toast.error("Something went wrong!");
-        return;
-      }
+
+      console.log(txId);
 
       toast.success("Account created!");
 
