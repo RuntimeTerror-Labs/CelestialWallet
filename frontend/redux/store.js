@@ -9,6 +9,7 @@ import contactReducer from "./slice/contactsSlice";
 import dataReducer from "./slice/dataSlice";
 import changeEmailReducer from "./slice/changeEmailSlice";
 import transferReducer from "./slice/transferSlice";
+import forgotPasswordReducer from "./slice/forgotPasswordSlice";
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     data: dataReducer,
     changeEmail: changeEmailReducer,
     transfer: transferReducer,
+    forgotPassword: forgotPasswordReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

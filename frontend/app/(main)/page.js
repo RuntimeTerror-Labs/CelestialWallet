@@ -11,11 +11,13 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 import { Urbanist } from "next/font/google";
-import { AtSign } from "lucide-react";
+import { AtSign, HelpCircle } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import useCelestial from "@/hooks/useCelestial";
 import { Info, Loader2 } from "lucide-react";
 import useSignin from "@/hooks/useSignin";
+import { useDispatch } from "react-redux";
+import { handleDialog } from "@/redux/slice/forgotPasswordSlice";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -35,6 +37,7 @@ export default function Page() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
   const [previousDomain, setPreviousDomain] = useState("");
+  const dispatch = useDispatch();
 
   const checkCelestial = async () => {
     if (domain.length < 13) return;
@@ -115,7 +118,7 @@ export default function Page() {
               </p>
 
               <p
-                className="font-bold -mt-4 hover:underline hover:cursor-pointer text-center"
+                className="font-bold -mt-4 text-blue-500/70 hover:underline hover:cursor-pointer text-center"
                 onClick={() => {
                   localStorage.removeItem("domain");
                   setDomain("");
@@ -174,14 +177,25 @@ export default function Page() {
             )}
           </div>
 
-          <Input
-            label="Password"
-            size="lg"
-            type="password"
-            className={urbanist.className}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="flex flex-col w-full">
+            <Input
+              label="Password"
+              size="lg"
+              type="password"
+              className={urbanist.className}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <p
+              className="mt-2 text-sm flex text-gray-500 hover:text-red-500/70 hover:cursor-pointer transition duration-300 w-fit"
+              onClick={() => {
+                dispatch(handleDialog());
+              }}
+            >
+              <HelpCircle size={20} className="inline mr-1" />
+              Forgot Password ?
+            </p>
+          </div>
           {!previousDomain && (
             <div className="-ml-2.5 -my-2">
               <Checkbox

@@ -23,6 +23,7 @@ export default function Step0() {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
   const username = useSelector((state) => state.user.user.username);
+  const walletAddress = useSelector((state) => state.user.user.pubKey);
 
   useEffect(() => {
     if (!inputRef.current) return;
@@ -47,6 +48,13 @@ export default function Step0() {
 
   const checkCelestial = async () => {
     setIsLoading(true);
+
+    if (input === walletAddress.toString()) {
+      setIsValid(false);
+      setIsLoading(false);
+      return;
+    }
+
     if (input.startsWith("0x") && input.length === 42) {
       setIsValid(true);
       setIsLoading(false);

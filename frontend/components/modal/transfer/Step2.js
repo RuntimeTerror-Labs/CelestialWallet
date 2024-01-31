@@ -43,6 +43,7 @@ export default function Step2() {
         onClick={() => {
           handleTransfer();
         }}
+        disabled={isLoading}
       >
         {isLoading ? (
           <Loader2 size={20} className="inline mr-1 animate-spin" />

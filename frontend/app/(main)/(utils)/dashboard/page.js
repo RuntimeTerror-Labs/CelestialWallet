@@ -29,7 +29,7 @@ export default function Dashboard() {
         <div className="border-[1px] rounded-3xl h-[9.7rem] w-52 shadow-lg">
           <Logo />
         </div>
-        <div className="border-[1px] rounded-3xl h-full w-52 row-span-2">
+        <div className=" rounded-3xl h-full w-52 row-span-2">
           <Saving />
         </div>
         <div className="border-[1px] rounded-3xl h-full w-full row-span-2 col-span-2 shadow-lg">

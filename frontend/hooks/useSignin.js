@@ -9,10 +9,12 @@ import {
   updatePubkey,
   updateUsername,
 } from "@/redux/slice/userSlice";
+import { ethers } from "ethers";
+import CelestialABI from "@/lib/abis/Celestial.json";
 
 export default function useSignin() {
-  const { passkey_prove } = useCircuits();
-  const { getCelestialAddress, getNonce, verifyPassword } = useCelestial();
+  const { hashPassword } = useCircuits();
+  const { getCelestialAddress } = useCelestial();
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -20,23 +22,28 @@ export default function useSignin() {
     try {
       const address = await getCelestialAddress(domain);
 
-      const nonce = await getNonce(address);
+      const providers = new ethers.providers.JsonRpcProvider(
+        process.env.NEXT_PUBLIC_RPC_URL
+      );
 
-      const proof = await passkey_prove(password, nonce);
+      const celestial = new ethers.Contract(address, CelestialABI, providers);
 
-      const isVerified = await verifyPassword(address, proof);
+      const hash = await celestial.passwordHash();
 
-      if (isVerified) {
-        toast.success("Successfully signed in");
-        dispatch(updatePubkey(address));
-        dispatch(updateUsername(domain));
-        dispatch(updatePassword(password));
-        if (isRemember) localStorage.setItem("domain", domain);
-        else localStorage.removeItem("domain");
-        router.push(`/dashboard`);
-      } else {
+      const passwordHash = await hashPassword(password);
+
+      if (passwordHash !== hash) {
         toast.error("Invalid credentials");
+        return false;
       }
+
+      toast.success("Successfully signed in");
+      dispatch(updatePubkey(address));
+      dispatch(updateUsername(domain));
+      dispatch(updatePassword(password));
+      if (isRemember) localStorage.setItem("domain", domain);
+      else localStorage.removeItem("domain");
+      router.push(`/dashboard`);
     } catch (e) {
       toast.error("Something went wrong");
       return false;
