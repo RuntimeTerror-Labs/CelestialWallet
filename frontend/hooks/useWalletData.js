@@ -8,6 +8,11 @@ import {
   setMarketData,
   setTransactions,
 } from "@/redux/slice/dataSlice";
+import {
+  CelestialFactory,
+  PasskeyUltraVerifier,
+  RecoveryUltraVerifier,
+} from "@/lib/abis/AddressManager";
 
 export default function useWalletData() {
   const dispatch = useDispatch();
@@ -47,7 +52,10 @@ export default function useWalletData() {
 
       const filteredTx = transactions.filter((tx) => {
         return tx.to !== null
-          ? tx.to.hash !== "0x05a5Ff5B301DAeEfff853f9A350753763E67329E"
+          ? tx.to.hash !== "0x05a5Ff5B301DAeEfff853f9A350753763E67329E" &&
+              tx.to.hash !== PasskeyUltraVerifier &&
+              tx.to.hash !== RecoveryUltraVerifier &&
+              tx.from.hash !== CelestialFactory
           : false;
       });
 

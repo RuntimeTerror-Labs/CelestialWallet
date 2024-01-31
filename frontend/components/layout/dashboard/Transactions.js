@@ -17,7 +17,7 @@ export default function Transactions() {
 
   return (
     <div className="h-full w-full bg-white rounded-3xl flex flex-col justify-between p-4 relative overflow-hidden">
-      <div className="h-full flex flex-col w-full">
+      <div className="h-full flex flex-col w-full z-10">
         <p className="text-5xl text-blue-500/70 font-bold">Txs</p>
         {transactions &&
           transactions.length > 0 &&
@@ -47,7 +47,7 @@ export default function Transactions() {
       )}
 
       <ArrowLeftRight
-        className="absolute -bottom-5 -right-3 text-blue-500/20"
+        className="absolute -top-5 -right-3 text-blue-500/20 z-0"
         size={125}
       ></ArrowLeftRight>
     </div>

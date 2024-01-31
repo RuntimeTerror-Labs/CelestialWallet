@@ -30,7 +30,9 @@ export default function TxMini({ tx }) {
                 onClick={() => {
                   window
                     .open(
-                      `https://pegasus.lightlink.io/tx/${tx.hash}`,
+                      `https://pegasus.lightlink.io/tx/${
+                        tx.hash ? tx.hash : tx.transaction_hash
+                      }`,
                       "_blank"
                     )
                     .focus();
@@ -47,7 +49,9 @@ export default function TxMini({ tx }) {
                 onClick={() => {
                   window
                     .open(
-                      `https://pegasus.lightlink.io/tx/${tx.hash}`,
+                      `https://pegasus.lightlink.io/tx/${
+                        tx.hash ? tx.hash : tx.transaction_hash
+                      }`,
                       "_blank"
                     )
                     .focus();
