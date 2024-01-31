@@ -64,7 +64,6 @@ const contactsSlice = createSlice({
 export const {
   setAbly,
   setAblyAuth,
-  setPresence,
   addContact,
   setContacts,
   addMessage,

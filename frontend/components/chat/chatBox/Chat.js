@@ -13,7 +13,6 @@ import {
   setAbly,
   setAblyAuth,
   setMessages,
-  setPresence,
 } from "@/redux/slice/contactsSlice";
 
 const Chat = () => {

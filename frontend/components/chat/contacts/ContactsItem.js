@@ -51,6 +51,7 @@ const ContactsItem = ({ chat }) => {
     const channel = ablyAuth.channels.get(`chatId-${user}`);
 
     const enterCallback = (presence) => {
+      console.log(presence);
       if (presence.clientId === user) {
         setStatus("enter");
         dispatch(
@@ -76,6 +77,26 @@ const ContactsItem = ({ chat }) => {
 
     channel.presence.subscribe("enter", enterCallback);
     channel.presence.subscribe("leave", leaveCallback);
+
+    channel.presence.get((err, presences) => {
+      if (err) {
+        console.error("Error getting presence set:", err);
+        return;
+      }
+
+      const isUserOnline = presences.some(
+        (presence) => presence.clientId === user
+      );
+      if (isUserOnline) {
+        setStatus("enter");
+        dispatch(
+          setSelectedPresence({
+            status: "enter",
+            clientId: user,
+          })
+        );
+      }
+    });
 
     return () => {
       channel.presence.unsubscribe("enter", enterCallback);
