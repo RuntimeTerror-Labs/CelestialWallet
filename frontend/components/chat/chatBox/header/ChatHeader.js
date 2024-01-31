@@ -46,7 +46,7 @@ const ChatHeader = () => {
 
             <div
               className={`absolute top-0.5 right-0 border rounded-full w-3 h-3 ${
-                presence === "enter" || presence === "present"
+                presence.clientId === user && presence.status === "enter"
                   ? "bg-green-300 border-green-700"
                   : "bg-red-400 border-red-800"
               }`}

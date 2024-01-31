@@ -80,11 +80,11 @@ const Chat = () => {
 
     setAblyClient();
 
-    const userChannel = realtime.channels.get(`user-${currentUser.pubKey}`);
-    userChannel.presence.enter();
+    const channel = realtime.channels.get(`chatId-${currentUser.pubKey}`);
+    channel.presence.enter();
 
     return () => {
-      userChannel.presence.leave();
+      channel.presence.leave();
       axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/ably/disconnect`);
       dispatch(setAbly(null));
     };
@@ -101,39 +101,12 @@ const Chat = () => {
       dispatch(addMessage(message.data));
     });
 
-    channel.presence.enter();
-
-    channel.presence.subscribe((presenceMsg) => {
-      const user =
-        selectedContact.users[0] === currentUser.pubKey
-          ? selectedContact.users[1]
-          : selectedContact.users[0];
-
-      if (presenceMsg.clientId === user) {
-        console.log(presenceMsg.action);
-        dispatch(
-          setPresence({
-            user: presenceMsg.clientId,
-            action: presenceMsg.action,
-          })
-        );
-      }
-    });
-
     initializeChat();
 
     return () => {
-      // channel.presence.leave();
       channel.unsubscribe();
     };
   }, [selectedContact]);
-
-  // useEffect(() => {
-  //   if (messagesContainerRef.current) {
-  //     const { scrollHeight } = messagesContainerRef.current;
-  //     messagesContainerRef.current.scrollTo(0, scrollHeight);
-  //   }
-  // }, [messageHistory]);
 
   return selectedContact ? (
     <div className={`mb-6 flex-1 relative`}>

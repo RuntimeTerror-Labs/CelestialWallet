@@ -29,21 +29,6 @@ const ContactsItem = ({ chat }) => {
     chat.users[0] === currentUser.pubKey ? chat.users[1] : chat.users[0];
 
   useEffect(() => {
-    const userChannel = ablyAuth.channels.get(`user-${user}`);
-
-    userChannel.presence.subscribe((presenceMsg) => {
-      console.log(presenceMsg);
-      if (presenceMsg.clientId === user) {
-        setStatus(presenceMsg.action);
-      }
-    });
-
-    return () => {
-      userChannel.presence.unsubscribe();
-    };
-  }, [ablyAuth, dispatch]);
-
-  useEffect(() => {
     const fetchMessage = async () => {
       try {
         const res = await axios.get(
@@ -62,9 +47,45 @@ const ContactsItem = ({ chat }) => {
     // }
   }, []);
 
+  useEffect(() => {
+    const channel = ablyAuth.channels.get(`chatId-${user}`);
+
+    const enterCallback = (presence) => {
+      if (presence.clientId === user) {
+        setStatus("enter");
+        dispatch(
+          setSelectedPresence({
+            status: "enter",
+            clientId: user,
+          })
+        );
+      }
+    };
+
+    const leaveCallback = (presence) => {
+      if (presence.clientId === user) {
+        setStatus("leave");
+        dispatch(
+          setSelectedPresence({
+            status: "leave",
+            clientId: user,
+          })
+        );
+      }
+    };
+
+    channel.presence.subscribe("enter", enterCallback);
+    channel.presence.subscribe("leave", leaveCallback);
+
+    return () => {
+      channel.presence.unsubscribe("enter", enterCallback);
+      channel.presence.unsubscribe("leave", leaveCallback);
+      channel.presence.leave();
+    };
+  }, [user]);
+
   const handleContactClick = () => {
     dispatch(setSelectedContact(chat));
-    dispatch(setSelectedPresence(status));
   };
 
   return (
