@@ -51,7 +51,7 @@ export default function Saving() {
 
       <p className="mt-0">
         <span className="text-lg font-bold text-pink-500/40 group-hover:text-white/70 transition duration-300">
-          {savings ? (Number(savings[0]) / 10 ** 18).toFixed(2) : "0.00"} ETH
+          {savings ? (Number(savings[0]) / 10 ** 18).toFixed(4) : "0.0000"} ETH
         </span>
       </p>
 

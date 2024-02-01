@@ -110,7 +110,7 @@ export default function Savings() {
               <p className="text-2xl font-bold -mt-3">
                 ${((Number(savings[0]) / 10 ** 18) * ethPrice).toFixed(2)}{" "}
                 <span className="font-bold text-sm text-black/40">
-                  {(Number(savings[0]) / 10 ** 18).toFixed(2)} ETH
+                  {(Number(savings[0]) / 10 ** 18).toFixed(4)} ETH
                 </span>
               </p>
 

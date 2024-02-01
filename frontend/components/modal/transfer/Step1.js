@@ -1,11 +1,12 @@
 "use client";
 
 import { Urbanist } from "next/font/google";
-import { AtSign, DollarSign, Info, Loader2 } from "lucide-react";
+import { AtSign, DollarSign, Info, Loader2, PiggyBank } from "lucide-react";
 import { Input, Button } from "@material-tailwind/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAmount, setStep } from "@/redux/slice/transferSlice";
+import { evaluateTotalAmount } from "@/lib/SavingEvaluater";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -17,6 +18,7 @@ export default function Step1() {
   const balance = useSelector((state) => state.data.balance);
   const ethPrice = useSelector((state) => state.data.ethPrice);
   const dispatch = useDispatch();
+  const savings = useSelector((state) => state.data.savings);
 
   const handleInput = (e) => {
     const decimalRegex = /^[0-9]*\.?[0-9]*$/;
@@ -46,15 +48,39 @@ export default function Step1() {
       />
       <div
         className={
-          "mt-2 text-sm flex text-gray-600 hover:text-blue-500 hover:cursor-pointer " +
+          "mt-2 text-sm flex text-gray-600 w-fit hover:text-blue-500 hover:cursor-pointer " +
           urbanist.className
         }
         onClick={() => {
           setInput(balance * ethPrice);
         }}
       >
-        Balance : $ {(balance * ethPrice).toFixed(2)}
+        Balance : $
+        <span className="font-bold ml-1">
+          {" "}
+          {(balance * ethPrice).toFixed(2)}
+        </span>
       </div>
+
+      {savings &&
+        savings[2] !== 0 &&
+        input &&
+        balance * ethPrice >= input &&
+        evaluateTotalAmount(input) - input > 0 &&
+        evaluateTotalAmount(input) <= balance * ethPrice &&
+        Number(input) !== 0 && (
+          <div className="flex items-center text-sm text-blue-600/50 mt-1 -mb-2 ">
+            <PiggyBank size={20} className="mr-2 animate-bounce" />
+            <span className={urbanist.className + " font-medium"}>
+              Sending
+              <span className="font-bold">
+                {" "}
+                $ {(evaluateTotalAmount(input) - input).toFixed(2)}
+              </span>{" "}
+              to your savings account
+            </span>
+          </div>
+        )}
 
       <Button
         variant="gradient"

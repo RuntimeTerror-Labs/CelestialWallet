@@ -13,11 +13,16 @@ import useCelestial from "./useCelestial";
 import { useSelector } from "react-redux";
 import { ethers } from "ethers";
 import CelestialFactoryABI from "@/lib/abis/CelestialFactory.json";
-import { CelestialFactory } from "@/lib/abis/AddressManager";
+import {
+  CelestialFactory,
+  CelestialSavingManager,
+} from "@/lib/abis/AddressManager";
 import useRelay from "./useRelay";
 import toast from "react-hot-toast";
 import useWalletData from "./useWalletData";
 import useSavings from "./useSavings";
+import { evaluateTotalAmount } from "@/lib/SavingEvaluater";
+import CelestialSavingManagerABI from "@/lib/abis/CelestialSavingManager.json";
 
 export default function useTransfer() {
   const dispatch = useDispatch();
@@ -31,6 +36,9 @@ export default function useTransfer() {
   const { execute } = useRelay();
   const { fetchBalance, fetchTransactions } = useWalletData();
   const { fetchSavings } = useSavings();
+  const savings = useSelector((state) => state.data.savings);
+  const ethPrice = useSelector((state) => state.data.ethPrice);
+  const balance = useSelector((state) => state.data.balance);
 
   const handleTransfer = async () => {
     dispatch(setIsLoading(true));
@@ -48,13 +56,48 @@ export default function useTransfer() {
         provider
       );
 
-      const data = factory.interface.encodeFunctionData("executeCelestialTx", [
-        name,
-        passwordProof,
-        recipient,
-        (amount * 10 ** 18).toFixed(0),
-        "0x",
-      ]);
+      const amountInDollars = amount * ethPrice;
+      const totalAmount = evaluateTotalAmount(amountInDollars);
+
+      const totalSavings = totalAmount - amountInDollars;
+
+      let data;
+      if (
+        !savings ||
+        savings[2] === 0 ||
+        totalSavings <= 0 ||
+        totalSavings + amountInDollars > balance * ethPrice
+      ) {
+        data = factory.interface.encodeFunctionData("executeCelestialTx", [
+          name,
+          passwordProof,
+          recipient,
+          (amount * 10 ** 18).toFixed(0),
+          "0x",
+        ]);
+      } else {
+        const savingContract = new ethers.Contract(
+          CelestialSavingManager,
+          CelestialSavingManagerABI,
+          provider
+        );
+
+        const savingsData = savingContract.interface.encodeFunctionData(
+          "deposit",
+          []
+        );
+
+        data = factory.interface.encodeFunctionData("executeCelestialBatchTx", [
+          name,
+          passwordProof,
+          [recipient, CelestialSavingManager],
+          [
+            (amount * 10 ** 18).toFixed(0),
+            ((totalSavings / ethPrice) * 10 ** 18).toFixed(0),
+          ],
+          ["0x", savingsData],
+        ]);
+      }
 
       const txId = await execute(data);
 
