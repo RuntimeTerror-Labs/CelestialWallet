@@ -1,5 +1,6 @@
 "use client";
 import { handleDialog } from "@/redux/slice/startSavingSlice";
+import { handleDialog as handleDlg } from "@/redux/slice/savingsSlice";
 import { Chip } from "@material-tailwind/react";
 import { PiggyBank } from "lucide-react";
 import toast from "react-hot-toast";
@@ -17,7 +18,7 @@ export default function Saving() {
         if (!savings) return toast.error("Please Login!");
         Number(savings[2]) === 0
           ? dispatch(handleDialog())
-          : toast.success("Savings is already enabled!");
+          : dispatch(handleDlg());
       }}
     >
       <p className="text-4xl font-bold text-pink-500/70 group-hover:text-white/70 transition duration-300">
