@@ -21,14 +21,10 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("CelestialFactory", {
+  await deploy("CelestialSavingManager", {
     from: deployer,
     // Contract constructor arguments
-    args: [
-      "0xcbd8ef2d15e11fc65793e693d7d11e918fafa5d6",
-      "0x50f1bbb486d62921ed9ce411c6b85ec0b73d9130",
-      "0xf1e842ef0774dbe7caf7f0f95d1315fd834d2a4b",
-    ],
+    args: [],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.

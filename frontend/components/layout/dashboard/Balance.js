@@ -62,7 +62,7 @@ export default function Balance() {
       {marketData && marketData.length > 0 && (
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={marketData}
+            data={marketData.toReversed()}
             margin={{
               top: 5,
               right: 10,

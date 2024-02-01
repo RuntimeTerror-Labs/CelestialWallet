@@ -1,14 +1,25 @@
 "use client";
+import { handleDialog } from "@/redux/slice/startSavingSlice";
 import { Chip } from "@material-tailwind/react";
 import { PiggyBank } from "lucide-react";
-import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Saving() {
   const savings = useSelector((state) => state.data.savings);
   const ethPrice = useSelector((state) => state.data.ethPrice);
+  const dispatch = useDispatch();
 
   return (
-    <div className="border-[1px] border-pink-500 hover:border-black h-full w-full hover:cursor-pointer bg-white transition duration-300 hover:bg-black rounded-3xl overflow-hidden group relative p-4">
+    <div
+      className="border-[1px] border-pink-500 hover:border-black h-full w-full hover:cursor-pointer bg-white transition duration-300 hover:bg-black rounded-3xl overflow-hidden group relative p-4"
+      onClick={() => {
+        if (!savings) return toast.error("Please Login!");
+        Number(savings[2]) === 0
+          ? dispatch(handleDialog())
+          : toast.success("Savings is already enabled!");
+      }}
+    >
       <p className="text-4xl font-bold text-pink-500/70 group-hover:text-white/70 transition duration-300">
         Savings
       </p>

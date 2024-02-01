@@ -34,7 +34,7 @@ const TransactionsPage = () => {
             <p className="text-5xl text-blue-500/70 font-bold">Transactions</p>
           </div>
 
-          <div className="w-full min-w-96 mx-auto flex-grow overflow-y-auto hide-scroll my-3">
+          <div className="w-full min-w-96 mx-auto flex-grow overflow-y-auto hide-scroll rounded-3xl my-3">
             {transactions &&
               transactions.length > 0 &&
               transactions.map((transaction, index) => {
@@ -45,7 +45,7 @@ const TransactionsPage = () => {
           <div className="w-full min-w-96 mx-auto z-10">
             <div
               className={
-                "rounded-3xl p-4 h-20 z-10 w-full flex items-center bg-blue-500/80 relative overflow-hidden group hover:cursor-pointer hover:bg-black transition duration-300 " +
+                "rounded-3xl p-4 h-20 z-10 w-full flex items-center shadow-lg bg-blue-500/80 relative overflow-hidden group hover:cursor-pointer hover:bg-black transition duration-300 " +
                 urbanist.className
               }
               onClick={() => {

@@ -16,8 +16,9 @@ contract CelestialSavingManager is ERC721URIStorage, Ownable {
     }
 
     mapping(address => Account) public accounts;
+    mapping(address => uint256[]) public accountNFTs;
 
-    constructor() ERC721("WeeklySummaryNFT", "WSNFT") {
+    constructor() ERC721("SummaryNFT", "SNFT") {
         nextNFTId = 1;
     }
 
@@ -42,6 +43,7 @@ contract CelestialSavingManager is ERC721URIStorage, Ownable {
             string memory tokenURI = string(abi.encodePacked("data:application/json;base64,", Conversion.encodeDetails(account, balance)));
             _mint(account, nextNFTId);
             _setTokenURI(nextNFTId, tokenURI);
+            accountNFTs[account].push(nextNFTId);
             nextNFTId++;
             accounts[account].lastSummaryTime = block.timestamp;
         }

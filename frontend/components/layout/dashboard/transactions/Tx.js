@@ -1,11 +1,18 @@
 "use client";
 import {
+  CelestialSavingManager,
   PasskeyUltraVerifier,
   RecoveryUltraVerifier,
 } from "@/lib/abis/AddressManager";
 import pubKeySlicer from "@/lib/pubKeySlicer";
 import { CheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/solid";
-import { ArrowDownLeft, ArrowUpRight, Check, Copy } from "lucide-react";
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Check,
+  Copy,
+  PiggyBank,
+} from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -24,28 +31,49 @@ export default function TxMini({ tx }) {
       <div className=" flex h-full w-full items-center justify-between p-5">
         <div className="flex gap-2 items-center">
           <div>
-            {tx.to.hash === walletAddress ? (
-              <p
-                className="text-black/50 group hover:bg-black hover:border-black transition duration-300 text-sm font-bold border border-green-500/70 rounded-lg p-5"
-                onClick={() => {
-                  window
-                    .open(
-                      `https://pegasus.lightlink.io/tx/${
-                        tx.hash ? tx.hash : tx.transaction_hash
-                      }`,
-                      "_blank"
-                    )
-                    .focus();
-                }}
-              >
-                <ArrowDownLeft
-                  className="inline-block group-hover:text-white/70 transition duration-300  text-green-500/70"
-                  size={28}
-                ></ArrowDownLeft>
-              </p>
+            {tx.to.hash !== CelestialSavingManager ? (
+              tx.to.hash === walletAddress ? (
+                <p
+                  className="text-black/50 group hover:bg-black hover:border-black transition duration-300 text-sm font-bold border border-green-500/70 rounded-lg p-5"
+                  onClick={() => {
+                    window
+                      .open(
+                        `https://pegasus.lightlink.io/tx/${
+                          tx.hash ? tx.hash : tx.transaction_hash
+                        }`,
+                        "_blank"
+                      )
+                      .focus();
+                  }}
+                >
+                  <ArrowDownLeft
+                    className="inline-block group-hover:text-white/70 transition duration-300  text-green-500/70"
+                    size={28}
+                  ></ArrowDownLeft>
+                </p>
+              ) : (
+                <p
+                  className="text-black/50 text-sm group hover:bg-black hover:border-black transition duration-300 font-bold border border-red-500/70 rounded-lg p-5"
+                  onClick={() => {
+                    window
+                      .open(
+                        `https://pegasus.lightlink.io/tx/${
+                          tx.hash ? tx.hash : tx.transaction_hash
+                        }`,
+                        "_blank"
+                      )
+                      .focus();
+                  }}
+                >
+                  <ArrowUpRight
+                    className="inline-block group-hover:text-white/70 transition duration-300 text-red-500/70"
+                    size={28}
+                  ></ArrowUpRight>
+                </p>
+              )
             ) : (
               <p
-                className="text-black/50 text-sm group hover:bg-black hover:border-black transition duration-300 font-bold border border-red-500/70 rounded-lg p-5"
+                className="text-black/50 text-sm group hover:bg-black hover:border-black transition duration-300 font-bold border border-blue-500/70 rounded-lg p-5"
                 onClick={() => {
                   window
                     .open(
@@ -57,10 +85,10 @@ export default function TxMini({ tx }) {
                     .focus();
                 }}
               >
-                <ArrowUpRight
-                  className="inline-block group-hover:text-white/70 transition duration-300 text-red-500/70"
+                <PiggyBank
+                  className="inline-block group-hover:text-white/70 transition duration-300 text-blue-500/70"
                   size={28}
-                ></ArrowUpRight>
+                ></PiggyBank>
               </p>
             )}
           </div>

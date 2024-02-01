@@ -703,7 +703,7 @@ const deployedContracts = {
       },
     },
     CelestialSavingManager: {
-      address: "0x8487F6630510A00bFACd9Fe701700F193F52C04F",
+      address: "0x8e8379187B999e7028C86F58945740F723D63654",
       abi: [
         {
           inputs: [],
@@ -835,6 +835,30 @@ const deployedContracts = {
           ],
           name: "Transfer",
           type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "accountNFTs",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
         },
         {
           inputs: [
