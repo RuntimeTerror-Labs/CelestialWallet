@@ -7,7 +7,7 @@ import {
 import { ethers } from "ethers";
 import CelestialSavingManagerABI from "@/lib/abis/CelestialSavingManager.json";
 import { useDispatch, useSelector } from "react-redux";
-import { setSavings } from "@/redux/slice/dataSlice";
+import { setNfts, setSavings } from "@/redux/slice/dataSlice";
 import useRelay from "./useRelay";
 import useCircuits from "./useCircuits";
 import useCelestial from "./useCelestial";
@@ -164,11 +164,12 @@ export default function useSavings() {
       const details = await contract.accounts(address);
 
       if (
-        details[0] === 0 ||
-        details[1] === 0 ||
-        details[2] === 0 ||
+        details[0].toNumber() === 0 ||
+        details[2].toNumber() === 0 ||
         details[1].toNumber() + 86400 > new Date().getTime() / 1000
       ) {
+        const nfts = await contract.getAllNFTs(address);
+        dispatch(setNfts(nfts));
         return;
       }
 
@@ -190,6 +191,9 @@ export default function useSavings() {
       const txId = await execute(payload);
 
       console.log(txId);
+
+      const nfts = await contract.getAllNFTs(address);
+      dispatch(setNfts(nfts));
     } catch (e) {
       console.log(e);
     }

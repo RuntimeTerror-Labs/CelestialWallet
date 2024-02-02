@@ -10,6 +10,7 @@ const dataSlice = createSlice({
     transactions: [],
     savings: null,
     paymentAmount: 0,
+    nfts: [],
   },
 
   reducers: {
@@ -36,6 +37,10 @@ const dataSlice = createSlice({
     setPaymentAmount: (state, actions) => {
       state.paymentAmount = actions.payload;
     },
+
+    setNfts: (state, actions) => {
+      state.nfts = actions.payload;
+    },
   },
 });
 
@@ -46,6 +51,7 @@ export const {
   setTransactions,
   setSavings,
   setPaymentAmount,
+  setNfts,
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

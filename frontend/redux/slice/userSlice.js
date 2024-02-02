@@ -4,7 +4,11 @@ const userSlice = createSlice({
   name: "user",
 
   initialState: {
-    user: { pubKey: "0x31Krpa7vb", username: "Anoy@celestial", password: "" },
+    user: {
+      pubKey: "0x11c88aCb3256A65D8A16e91E386f94D03769e0e7",
+      username: "Anoy@celestial",
+      password: "",
+    },
   },
 
   reducers: {

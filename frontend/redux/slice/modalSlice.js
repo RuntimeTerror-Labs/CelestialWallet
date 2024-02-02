@@ -8,6 +8,7 @@ const modalSlice = createSlice({
     newContactModal: false,
     depositModal: false,
     transferModal: false,
+    nftModal: false,
   },
 
   reducers: {
@@ -26,6 +27,10 @@ const modalSlice = createSlice({
     toggleTransferModal: (state, actions) => {
       state.transferModal = actions.payload;
     },
+
+    toggleNftModal: (state, actions) => {
+      state.nftModal = actions.payload;
+    },
   },
 });
 
@@ -34,6 +39,7 @@ export const {
   toggleNewContactModal,
   toggleDepositModal,
   toggleTransferModal,
+  toggleNftModal,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

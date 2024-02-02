@@ -32,6 +32,10 @@ contract CelestialSavingManager is ERC721URIStorage, Ownable{
         accounts[msg.sender] = Account(0, 0, time);
     }
 
+    function getAllNFTs(address account) external view returns (uint256[] memory) {
+        return accountNFTs[account];
+    }
+
     function deposit() external payable isValidAccount(msg.sender) {
         accounts[msg.sender].balance += msg.value;   
     }
