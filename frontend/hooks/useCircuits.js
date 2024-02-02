@@ -17,7 +17,9 @@ export default function useCircuits() {
     const noir = new Noir(passkeyHash, backend);
 
     const input = {
-      password: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(password)),
+      password: ethers.utils.hexlify(
+        ethers.utils.ripemd160(ethers.utils.toUtf8Bytes(password))
+      ),
     };
 
     const output = await noir.execute(input);
@@ -51,7 +53,9 @@ export default function useCircuits() {
     const passwordHex = await hashPassword(password);
 
     const inputs = {
-      password: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(password)),
+      password: ethers.utils.hexlify(
+        ethers.utils.ripemd160(ethers.utils.toUtf8Bytes(password))
+      ),
       password_hash: passwordHex,
       nonce: ethers.utils.hexlify(nonce),
       use_nonce: ethers.utils.hexlify(nonce),

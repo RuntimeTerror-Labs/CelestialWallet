@@ -45,6 +45,7 @@ export default function useSignin() {
       else localStorage.removeItem("domain");
       router.push(`/dashboard`);
     } catch (e) {
+      console.log(e);
       toast.error("Something went wrong");
       return false;
     }

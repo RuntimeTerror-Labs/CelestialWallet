@@ -703,7 +703,7 @@ const deployedContracts = {
       },
     },
     CelestialSavingManager: {
-      address: "0x8e8379187B999e7028C86F58945740F723D63654",
+      address: "0xD2a5C6901259AeB58Cbc1CeDF7A9Ce5941DA3Be8",
       abi: [
         {
           inputs: [],

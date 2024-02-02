@@ -15,6 +15,8 @@ import { Urbanist } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { handleDialog } from "@/redux/slice/savingsSlice";
+import useSavings from "@/hooks/useSavings";
+import { Loader2 } from "lucide-react";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -33,6 +35,7 @@ export default function Savings() {
     seconds: 0,
   });
   const ethPrice = useSelector((state) => state.data.ethPrice);
+  const { redeemSaving } = useSavings();
 
   useEffect(() => {
     if (!savings) return;
@@ -120,7 +123,9 @@ export default function Savings() {
                 className={
                   urbanist.className + " flex items-center mt-1 justify-center"
                 }
-                onClick={() => {}}
+                onClick={() => {
+                  redeemSaving();
+                }}
                 disabled={
                   isLoading ||
                   Number(savings[2]) === 0 ||

@@ -14,6 +14,7 @@ import useCelestial from "./useCelestial";
 import { handleDialog, setIsLoading } from "@/redux/slice/startSavingSlice";
 import toast from "react-hot-toast";
 import CelestialFactoryABI from "@/lib/abis/CelestialFactory.json";
+import { setIsLoading as setLoading } from "@/redux/slice/savingsSlice";
 
 export default function useSavings() {
   const dispatch = useDispatch();
@@ -101,5 +102,98 @@ export default function useSavings() {
     }
   };
 
-  return { fetchSavings, enableSaving };
+  const redeemSaving = async () => {
+    dispatch(setLoading(true));
+    try {
+      const nonce = await getNonce(walletAddress);
+
+      const password_proof = await passkey_prove(password, nonce);
+
+      const provider = new ethers.providers.JsonRpcProvider(
+        process.env.NEXT_PUBLIC_RPC_URL
+      );
+
+      const SavingContracts = new ethers.Contract(
+        CelestialSavingManager,
+        CelestialSavingManagerABI,
+        provider
+      );
+
+      const data = SavingContracts.interface.encodeFunctionData("redeem");
+
+      const factory = new ethers.Contract(
+        CelestialFactory,
+        CelestialFactoryABI,
+        provider
+      );
+
+      const payload = factory.interface.encodeFunctionData(
+        "executeCelestialTx",
+        [name, password_proof, CelestialSavingManager, 0, data]
+      );
+
+      const txId = await execute(payload);
+
+      console.log(txId);
+
+      dispatch(setLoading(false));
+      toast.success("Saving Disabled");
+      fetchSavings(walletAddress);
+    } catch (err) {
+      console.log(err);
+      dispatch(setLoading(false));
+    }
+  };
+
+  const mintSummaryNFT = async (address) => {
+    try {
+      const provider = new ethers.providers.JsonRpcProvider(
+        process.env.NEXT_PUBLIC_RPC_URL
+      );
+
+      const nonce = await getNonce(walletAddress);
+
+      const password_proof = await passkey_prove(password, nonce);
+
+      const contract = new ethers.Contract(
+        CelestialSavingManager,
+        CelestialSavingManagerABI,
+        provider
+      );
+
+      const details = await contract.accounts(address);
+
+      if (
+        details[0] === 0 ||
+        details[1] === 0 ||
+        details[2] === 0 ||
+        details[1].toNumber() + 86400 > new Date().getTime() / 1000
+      ) {
+        return;
+      }
+
+      const data = contract.interface.encodeFunctionData("mintWeeklyNFT", [
+        address,
+      ]);
+
+      const factory = new ethers.Contract(
+        CelestialFactory,
+        CelestialFactoryABI,
+        provider
+      );
+
+      const payload = factory.interface.encodeFunctionData(
+        "executeCelestialTx",
+        [name, password_proof, CelestialSavingManager, 0, data]
+      );
+
+      const txId = await execute(payload);
+
+      console.log(txId);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return { fetchSavings, enableSaving, mintSummaryNFT, redeemSaving };
 }

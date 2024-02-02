@@ -8,7 +8,7 @@ export default function WalletProvider({ children }) {
   const walletAddress = useSelector((state) => state.user.user.pubKey);
   const ethPrice = useSelector((state) => state.data.ethPrice);
   const { fetchBalance, fetchPrice, fetchTransactions } = useWalletData();
-  const { fetchSavings } = useSavings();
+  const { fetchSavings, mintSummaryNFT } = useSavings();
   var currentTimeout = null;
 
   useEffect(() => {
@@ -34,6 +34,12 @@ export default function WalletProvider({ children }) {
       clearInterval(currentTimeout);
     };
   }, []);
+
+  useEffect(() => {
+    if (walletAddress) {
+      mintSummaryNFT(walletAddress);
+    }
+  }, [walletAddress]);
 
   return <>{children}</>;
 }

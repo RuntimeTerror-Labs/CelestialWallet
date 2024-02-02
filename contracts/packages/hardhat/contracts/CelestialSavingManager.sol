@@ -3,10 +3,9 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/metatx/ERC2771Context.sol";
 
-import "./utils/Conversion.sol";
-
-contract CelestialSavingManager is ERC721URIStorage, Ownable {
+contract CelestialSavingManager is ERC721URIStorage, Ownable{
     uint256 public nextNFTId;
 
     struct Account {
@@ -30,7 +29,7 @@ contract CelestialSavingManager is ERC721URIStorage, Ownable {
     function startAccount(uint256 time) external {
         require(accounts[msg.sender].balance == 0, "Account already started");
         require(time > block.timestamp, "Invalid time");
-        accounts[msg.sender] = Account(0, block.timestamp, time);
+        accounts[msg.sender] = Account(0, 0, time);
     }
 
     function deposit() external payable isValidAccount(msg.sender) {
@@ -40,7 +39,7 @@ contract CelestialSavingManager is ERC721URIStorage, Ownable {
     function mintWeeklyNFT(address account) public isValidAccount(account) {
         if (block.timestamp > accounts[account].lastSummaryTime + 1 days) {
             uint256 balance = accounts[account].balance;
-            string memory tokenURI = string(abi.encodePacked("data:application/json;base64,", Conversion.encodeDetails(account, balance)));
+            string memory tokenURI = Strings.toString(balance);
             _mint(account, nextNFTId);
             _setTokenURI(nextNFTId, tokenURI);
             accountNFTs[account].push(nextNFTId);
