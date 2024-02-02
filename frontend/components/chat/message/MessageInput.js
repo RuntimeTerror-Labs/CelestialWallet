@@ -4,12 +4,20 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Loader2Icon } from "lucide-react";
+import { DollarSign, Loader2Icon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@material-tailwind/react";
 
 import { setPaymentAmount } from "@/redux/slice/dataSlice";
 import { togglePaymentModal } from "@/redux/slice/modalSlice";
+import { Urbanist } from "next/font/google";
+import { ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
+
+const urbanist = Urbanist({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const MessageInput = () => {
   const dispatch = useDispatch();
@@ -22,6 +30,8 @@ const MessageInput = () => {
 
   const [message, setMessage] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const balance = useSelector((state) => state.data.balance);
+  const ethPrice = useSelector((state) => state.data.ethPrice);
 
   const textareaRef = useRef(null);
 
@@ -95,50 +105,68 @@ const MessageInput = () => {
   };
 
   return (
-    <form className="w-full flex justify-between items-center pr-2 gap-2 bg-white">
-      <textarea
-        ref={textareaRef}
-        placeholder="Type your message here..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        disabled={disabled}
-        rows={1}
-        className="bg-transparent flex-1 pl-4 text-black focus:outline-none text-primary-white placeholder:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
-        style={{ resize: "none", overflow: "hidden" }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage(e);
-          }
-        }}
-      />
-
-      {message && Number.isInteger(Number(message)) && (
-        <button
-          type="submit"
-          className={`bg-black h-fit rounded-lg w-20 py-1.5 text-white uppercase font-semibold ${
-            disabled ? "cursor-not-allowed" : "pl-2 pr-1"
-          }`}
-          onClick={(e) => sendPayment(e)}
-        >
-          Pay
-        </button>
+    <>
+      {message &&
+      !Number.isNaN(Number(message)) &&
+      Number(message) < balance * ethPrice &&
+      Number(message) > 0 ? (
+        <DollarSign className="w-5 h-5" />
+      ) : (
+        <ChatBubbleLeftIcon className="w-5 h-5" />
       )}
 
-      <button
-        type="submit"
-        className={`bg-black h-fit rounded-lg ${
-          disabled ? "p-1.5 cursor-not-allowed" : "py-1.5 pl-2 pr-1"
-        }`}
-        onClick={(e) => sendMessage(e)}
+      <form
+        className={
+          "w-full flex justify-between items-center pr-2 gap-2 bg-white " +
+          urbanist.className
+        }
       >
-        {disabled ? (
-          <Loader2Icon className="h-5 w-5 text-white animate-spin" />
-        ) : (
-          <PaperAirplaneIcon className="h-5 w-5 text-white pr-0.5" />
-        )}
-      </button>
-    </form>
+        <textarea
+          ref={textareaRef}
+          placeholder="Type your message here..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          disabled={disabled}
+          rows={1}
+          className="bg-transparent flex-1 pl-4 text-black focus:outline-none text-primary-white placeholder:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
+          style={{ resize: "none", overflow: "hidden" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              sendMessage(e);
+            }
+          }}
+        />
+
+        {message &&
+          !Number.isNaN(Number(message)) &&
+          Number(message) < balance * ethPrice &&
+          selectedContact &&
+          Number(message) > 0 && (
+            <Button
+              type="submit"
+              className={`bg-black w-20 h-10 flex items-center justify-center py-1.5 rounded-full text-white normal-case`}
+              onClick={(e) => sendPayment(e)}
+            >
+              <DollarSign className="h-5 w-5" />
+              Send
+            </Button>
+          )}
+
+        <Button
+          type="submit"
+          className={`bg-black h-fit rounded-full px-3`}
+          onClick={(e) => sendMessage(e)}
+          disabled={disabled || selectedContact === null || message === ""}
+        >
+          {disabled ? (
+            <Loader2Icon className="h-4 w-4 text-white animate-spin" />
+          ) : (
+            <PaperAirplaneIcon className="h-4 w-4 text-white pr-0.5" />
+          )}
+        </Button>
+      </form>
+    </>
   );
 };
 

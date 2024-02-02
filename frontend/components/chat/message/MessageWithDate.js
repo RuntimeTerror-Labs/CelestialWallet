@@ -24,8 +24,8 @@ const MessageWithDate = ({ message, nextMessage, index }) => {
   return (
     <div>
       {index === 0 && (
-        <div className="text-center text-xs text-white font-bold my-2 font-sans">
-          {messageDate}
+        <div className="flex justify-center text-xs text-black/60 font-bold my-2">
+          <div className="bg-white w-fit p-2 rounded-2xl">{messageDate}</div>
         </div>
       )}
 
@@ -107,10 +107,10 @@ const MessageWithDate = ({ message, nextMessage, index }) => {
                               : pubKeySlicer(currentContact.users[0])}
                           </p>
 
-                          <p className="font-bold">
+                          {/* <p className="font-bold">
                             <span>Saved: $</span>
                             11
-                          </p>
+                          </p> */}
                         </>
                       ) : (
                         <p>Sent to you</p>
@@ -127,8 +127,10 @@ const MessageWithDate = ({ message, nextMessage, index }) => {
       </div>
 
       {nextMessageDate && messageDate !== nextMessageDate && (
-        <div className="text-center text-xs text-white font-bold my-2 font-sans">
-          {nextMessageDate}
+        <div className="flex justify-center text-xs text-black/60 font-bold my-2">
+          <div className="bg-white w-fit p-2 rounded-2xl">
+            {nextMessageDate}
+          </div>
         </div>
       )}
     </div>

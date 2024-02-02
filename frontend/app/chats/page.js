@@ -9,7 +9,7 @@ function ChatPage() {
       <CreateContact />
       <ConfirmPayment />
 
-      <div className="flex h-screen gap-2 p-2">
+      <div className="flex h-screen gap-2 p-2 bg-[#eeeeee]">
         <ContactsBody />
         <ChatContainer />
       </div>

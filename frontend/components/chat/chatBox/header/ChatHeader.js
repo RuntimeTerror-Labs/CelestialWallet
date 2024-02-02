@@ -2,6 +2,7 @@
 
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import Avatar from "boring-avatars";
+import { Copy } from "lucide-react";
 
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -70,7 +71,7 @@ const ChatHeader = () => {
                 }}
               >
                 Click to Copy
-                <DocumentDuplicateIcon className="w-3 h-3 mt-px ml-1 text-gray-600" />
+                <Copy className="w-3 h-3 mt-px ml-1 text-gray-600" />
               </button>
             </div>
           </div>
