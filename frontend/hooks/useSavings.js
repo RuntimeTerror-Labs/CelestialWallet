@@ -151,10 +151,6 @@ export default function useSavings() {
         process.env.NEXT_PUBLIC_RPC_URL
       );
 
-      const nonce = await getNonce(walletAddress);
-
-      const password_proof = await passkey_prove(password, nonce);
-
       const contract = new ethers.Contract(
         CelestialSavingManager,
         CelestialSavingManagerABI,
@@ -172,6 +168,10 @@ export default function useSavings() {
         dispatch(setNfts(nfts));
         return;
       }
+
+      const nonce = await getNonce(walletAddress);
+
+      const password_proof = await passkey_prove(password, nonce);
 
       const data = contract.interface.encodeFunctionData("mintWeeklyNFT", [
         address,

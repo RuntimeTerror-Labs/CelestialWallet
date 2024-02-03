@@ -27,6 +27,7 @@ export default function WalletProvider({ children }) {
         fetchBalance(walletAddress);
         fetchTransactions(walletAddress);
         fetchSavings(walletAddress);
+        mintSummaryNFT(walletAddress);
       }
     }, 10000);
 
@@ -34,12 +35,6 @@ export default function WalletProvider({ children }) {
       clearInterval(currentTimeout);
     };
   }, []);
-
-  useEffect(() => {
-    if (walletAddress) {
-      mintSummaryNFT(walletAddress);
-    }
-  }, [walletAddress]);
 
   return <>{children}</>;
 }

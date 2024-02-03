@@ -44,6 +44,7 @@ const ConfirmPayment = () => {
   const balance = useSelector((state) => state.data.balance);
   const ethPrice = useSelector((state) => state.data.ethPrice);
   const savings = useSelector((state) => state.data.savings);
+  const address = useSelector((state) => state.user.user.pubKey);
 
   const handleOpen = () => {
     dispatch(setPaymentAmount(0));
@@ -117,9 +118,15 @@ const ConfirmPayment = () => {
                   to{" "}
                   <span className="font-bold">
                     {selectedContact &&
+                      selectedContact.users[1] !== address &&
                       selectedContact.users[1].substring(0, 4) +
                         "..." +
                         selectedContact.users[1].substring(36, 42)}
+                    {selectedContact &&
+                      selectedContact.users[1] === address &&
+                      selectedContact.users[0].substring(0, 4) +
+                        "..." +
+                        selectedContact.users[0].substring(36, 42)}
                   </span>
                   ?
                 </p>
