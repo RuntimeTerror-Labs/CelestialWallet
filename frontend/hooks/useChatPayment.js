@@ -24,7 +24,11 @@ export default function useChatPayment() {
   const selectedContact = useSelector(
     (state) => state.contacts.selectedContact
   );
-  const recipient = selectedContact ? selectedContact.users[1] : "";
+  const recipient = selectedContact
+    ? selectedContact.users[0] === address
+      ? selectedContact.users[1]
+      : selectedContact.users[0]
+    : "";
   const { passkey_prove } = useCircuits();
   const { getNonce } = useCelestial();
   const { execute } = useRelay();
