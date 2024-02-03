@@ -35,6 +35,7 @@ router.post("/", async (req, res) => {
       data,
       value: 0,
       gasLimit: 1000000,
+      gasPrice: 0,
     };
 
     const tx = await wallet.sendTransaction(unSignedTx);
