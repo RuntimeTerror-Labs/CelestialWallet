@@ -67,7 +67,7 @@ export default function Saving() {
 
       <Button
         className={
-          "bg-black h-32 normal-case flex w-full rounded-2xl hover:cursor-pointer text-white/70 group-hover:text-pink-500/70 group-hover:bg-white shadow-lg transition duration-300 p-4 py-3 group relative overflow-hidden z-10 " +
+          "bg-black mb-1 h-32 normal-case flex w-full border-[1px] border-white rounded-2xl hover:cursor-pointer text-white/70 hover:text-pink-500/70 hover:bg-white shadow-lg transition duration-300 p-4 py-3 group relative overflow-hidden z-10 " +
           urbanist.className
         }
         onClick={(e) => {

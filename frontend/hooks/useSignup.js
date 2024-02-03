@@ -2,7 +2,12 @@
 
 import { Magic } from "magic-sdk";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsLoading } from "@/redux/slice/signupSlice";
+import {
+  setIsLoading,
+  setName,
+  setPassword,
+  setStep,
+} from "@/redux/slice/signupSlice";
 import toast from "react-hot-toast";
 import { ethers } from "ethers";
 import axios from "axios";
@@ -86,6 +91,9 @@ export default function useSignup() {
       dispatch(updatePubkey(wallet.walletAddress));
       dispatch(updateUsername(name + "@celestial"));
       dispatch(updatePassword(password));
+      dispatch(setStep(0));
+      dispatch(setName(""));
+      dispatch(setPassword(""));
 
       router.push("/dashboard");
 

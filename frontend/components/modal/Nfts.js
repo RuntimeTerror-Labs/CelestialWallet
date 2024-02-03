@@ -12,7 +12,7 @@ import {
 import { Urbanist } from "next/font/google";
 import { toggleNftModal } from "@/redux/slice/modalSlice";
 import NFT from "./nfts/NFT";
-import { ImageOff } from "lucide-react";
+import { ImageOff, Info } from "lucide-react";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -34,8 +34,12 @@ export default function Nfts() {
         <Card
           className={"w-96 shadow-none bg-transparent " + urbanist.className}
         >
-          <CardHeader className="bg-transparent flex text-3xl font-bold shadow-none">
-            Savings NFT
+          <CardHeader className="bg-transparent flex flex-col text-3xl font-bold shadow-none">
+            Summary NFT
+            <p className="mt-0 text-sm flex font-normal text-gray-500">
+              <Info size={20} className="inline mr-1" />
+              Summary NFTs are the NFTs you receive when you save on Celestial.
+            </p>
           </CardHeader>
 
           <CardBody className="flex h-96  mt-3 mx-3 relative">
